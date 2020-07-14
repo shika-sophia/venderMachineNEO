@@ -7,7 +7,7 @@ public class Drink {
   //====== drinkName() ======
   public List<String> drinkName(){
       List<String> drinkName = new ArrayList<>();
-        drinkName.add("コーヒー");
+        drinkName.add("コーヒー ");
         drinkName.add("コーラ");
         drinkName.add("オレンジジュース");
         drinkName.add("紅茶");
