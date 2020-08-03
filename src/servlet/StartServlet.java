@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,13 +18,10 @@ import model.Drink;
 public class StartServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-
-  public void init(ServletConfig config) throws ServletException {
-    int money = 0;
-  }//init()
-
-
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      //initialize parameter
+      int moneyStock = 0;
+
       //---- call Drink.drinkName() and price() ----
       Drink drink = new Drink();
       List<String> drinkName = drink.drinkName();
@@ -35,6 +31,9 @@ public class StartServlet extends HttpServlet {
       HttpSession session = request.getSession();
       session.setAttribute("drinkName", drinkName);
       session.setAttribute("price", price);
+
+      //---- set initializer to request scope ----
+      request.setAttribute("moneyStock", moneyStock);
 
       //---- forward to vender_index.jsp ----
       String path = "/vender_index.jsp";
