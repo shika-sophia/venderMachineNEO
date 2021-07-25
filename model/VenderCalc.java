@@ -7,9 +7,9 @@ import java.util.stream.Stream;
 public class VenderCalc {
     private List<String> drinkList;
     private List<Integer> priceList;
+    private List<Boolean> canBuyList = new ArrayList<>();
     private int current;   //現在の投入金額
     private int listLength;//drinkListの要素数
-    private List<Boolean> canBuyList = new ArrayList<>();
 
     public VenderCalc(DrinkData data) {
         this.drinkList = data.getDrinkList();
