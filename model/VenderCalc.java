@@ -9,17 +9,17 @@ public class VenderCalc {
     private List<Integer> priceList;
     private List<Boolean> canBuyList = new ArrayList<>();
     private int current;   //現在の投入金額
-    private int listLength;//drinkListの要素数
+    private int listSize;//drinkListの要素数
 
     public VenderCalc(DrinkData data) {
         this.drinkList = data.getDrinkList();
         this.priceList = data.getPriceList();
         this.current = 0;
-        this.listLength = drinkList.size();
+        this.listSize = drinkList.size();
 
         //initialize canBuyList
         Stream.generate(() -> false)
-            .limit(listLength)
+            .limit(listSize)
             .forEach(canBuyList::add);
     }//constructor
 
@@ -32,7 +32,7 @@ public class VenderCalc {
         System.out.println("priceList: " + here.priceList);
         System.out.println("canBuyList: " + here.canBuyList);
         System.out.println("current: " + here.current);
-        System.out.println("listLength: " + here.listLength);
+        System.out.println("listSize: " + here.listSize);
     }//main()
 
 }//class
@@ -42,6 +42,6 @@ drinkList: [コーヒー, コーラ, オレンジジュース, 紅茶, ウォー
 priceList: [130, 110, 110, 130, 100]
 canBuyList: [false, false, false, false, false]
 current: 0
-listLength: 5
+listSize: 5
 
 */
