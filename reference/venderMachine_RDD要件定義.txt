@@ -48,4 +48,22 @@ venderMachine 自動販売機プログラム
 ・商品と価格は固定だったが、新たにユーザーが商品追加・価格編集できるようにする。
 
 
+//====== Additional RDD ====== / 2021-07-27
+・View ボタンを 有効 / 無効で表示切替。当然、無効ならボタンは押せない仕様とする。
+・View Locale対応 日本語 / 英語表記とする。
+.View Localeでも 同じ金額。 100円 = $100。
+・View 投入金額は ラジオボタンで [ 10 | 50 | 100 | 500 | 1000 ]
+・View <table>商品一覧・ボタン
+*     現在金額の表示と おつりボタン
+*     購入商品リストの表示
+*     「おつり ○○円です。ありがとうございました。」の表示。
+
+◆データ遷移
+View -> Servlet
+  int throwMoney,
+  String order {各商品の name=""属性 | おつり }
+
+View <- Servlet
+  int current
+  List<Boolean> canBuyList,
 
