@@ -46,6 +46,14 @@ public class VenderCalc {
         return canBuyList;
     }//judgeCanBuy()
 
+    public int getCurrent() {
+        return current;
+    }
+
+    public List<Boolean> getCanBuyList() {
+        return canBuyList;
+    }
+
     //====== Test main() ======
     public static void main(String[] args) {
         var data = new DrinkData();
