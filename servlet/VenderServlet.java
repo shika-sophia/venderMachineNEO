@@ -1,7 +1,7 @@
 /**
  * @title venderMachineNEO / servlet / VenderServlet.java
  * @content 自動販売機
- * @see reference / venderMachine_RDD.txt
+ * @see reference / venderMachine_RDD要件定義.txt
  *
  * @package ---- servlet ----
  * @class EncodingFilter / jsp,Servletを「UTF-8」でencodeing
