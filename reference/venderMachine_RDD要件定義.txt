@@ -60,10 +60,30 @@ venderMachine 自動販売機プログラム
 
 ◆データ遷移
 View -> Servlet
-  int throwMoney,
+  int input,
   String order {各商品の name=""属性 | おつり }
+/**
+ * @param String order
+ * @content jspから渡されるボタンクリックの内容
+ * @value input10, input50, input100, input500, input1000
+ *        moneyのinput, 数字は投入金額
+ * @value req0, req1, req2, req3, req4
+ *        コーヒー, コーラ, オレンジジュース, 紅茶, ウォーターの注文
+ */
 
 View <- Servlet
   int current
   List<Boolean> canBuyList,
 
+◆購入処理
+*引数: int index
+*メソッド: calc.doBuy(index)
+*購入品: String buyDrink = drinkList.get(index);
+*価格:   int priceDrink = priceList.get(index);
+*
+*現在金額の差引: current -= priceDrink;
+*購入品のリスト追加: List<String> didBuy
+*                 didBuy.add(buyDrink);
+*購入品の表示: mess.viewBuy(buyDrink);
+*             StringBuffer buf;
+*             buf.append(buyDrink);
