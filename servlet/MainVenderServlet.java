@@ -22,16 +22,19 @@
  *          List<Integer> priceList /
  * @class VenderCalc / マネー管理、販売ロジック
  *        / int current,
+ *          int input,
+ *          String buyDrink,
  *          List<Boolean> canBuyList /
  *        judgeCanBuy(int input) //現在の金額で買えるか
  *        doBuy(int index)       //実際の購入処理
  *        -addMoney(int input)   //現在金額の加算処理
  * @class VenderMessage / 表示メッセージの管理
  *        / String msg /
- *        buildMsg()
+ *        buildMsg(String order, VenderCalc calc)
+ *        getMsg()
  * @class VenderParse / orderの解析
  *        //
- *        parseOrder(String order)
+ *        parseOrder(String order, VenderCalc calc)
  *
  * @package ---- WebContent/WEB-INF/view ----
  * @file venderView.jsp
