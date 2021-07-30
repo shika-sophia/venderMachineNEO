@@ -91,6 +91,7 @@ public class MainVenderServlet extends HttpServlet {
 
         request.setAttribute("current", current);
         request.setAttribute("msg", msg);
+        request.setAttribute("data", data);
         request.setAttribute("canBuyList", canBuyList);
 
         dis.forward(request, response);
