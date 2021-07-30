@@ -39,6 +39,9 @@
  * @package ---- WebContent/WEB-INF/view ----
  * @file venderView.jsp
  *
+ * @deploy /WEB-INF/lib/jstl-api-1.2.jar
+ * @deploy /WEB-INF/lib/jstl-impl-1.2.jar
+ * @see reference/venderViewBasic.jpg
  * @author shika
  * @date 2021-07-25
  */
@@ -99,7 +102,7 @@ public class MainVenderServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String order = (String) request.getAttribute("order");
+        String order = (String) request.getParameter("order");
         parse.parseOrder(order, calc);
         mess.buildMsg(order, calc);
 
