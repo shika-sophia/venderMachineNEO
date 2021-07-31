@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Arrays;
-
 public class VenderMessage {
     String msg;
 
@@ -16,6 +14,11 @@ public class VenderMessage {
                 calc.getBuyDrink());
         }
 
+        if(order.equals("finish")) {
+            msg = String.format("%d円を返金しました。\nありがとうございました。\n",
+                calc.getInput());
+        }
+
         return msg;
     }//buildMsg()
 
@@ -27,27 +30,27 @@ public class VenderMessage {
         return msg;
     }//getMsg()
 
-    //====== Test main() ====
-    public static void main(String[] args) {
-        var data = new DrinkData();
-        var calc = new VenderCalc(data);
-        var parse = new VenderParse();
-        var here = new VenderMessage();
-
-        String[] orderAry = {
-            "input10", "input50", "input100", "input500", "input1000",
-            "req0", "req1", "req2", "req3", "req4"
-        };
-
-        System.out.println(here.getMsg());
-        Arrays.stream(orderAry)
-            .forEach(order -> {
-                parse.parseOrder(order, calc);
-                here.buildMsg(order, calc);
-                System.out.println(here.getMsg());
-            });
-
-    }//main()
+//    //====== Test main() ====
+//    public static void main(String[] args) {
+//        var data = new DrinkData();
+//        var calc = new VenderCalc(data);
+//        var parse = new VenderParse();
+//        var here = new VenderMessage();
+//
+//        String[] orderAry = {
+//            "input10", "input50", "input100", "input500", "input1000",
+//            "req0", "req1", "req2", "req3", "req4"
+//        };
+//
+//        System.out.println(here.getMsg());
+//        Arrays.stream(orderAry)
+//            .forEach(order -> {
+//                parse.parseOrder(order, calc);
+//                here.buildMsg(order, calc);
+//                System.out.println(here.getMsg());
+//            });
+//
+//    }//main()
 }//class
 
 /*

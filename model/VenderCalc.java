@@ -1,8 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,16 +13,12 @@ public class VenderCalc {
     private volatile int input;     //各回の投入金額
     private volatile String buyDrink;//購入品の名前
     private int listSize;//drinkListの要素数
-    private int priceMin;//priceListの最小値
 
     public VenderCalc(DrinkData data) {
         this.drinkList = data.getDrinkList();
         this.priceList = data.getPriceList();
         this.current = 0;
         this.listSize = drinkList.size();
-        this.priceMin = priceList.stream()
-                .min(Comparator.naturalOrder())
-                .get();
 
         //initialize canBuyList
         Stream.generate(() -> false)
@@ -37,19 +31,18 @@ public class VenderCalc {
         this.current += input;
     }//addMoney()
 
-    public List<Boolean> judgeCanBuy(int input){
-        addMoney(input);        //現在金額に加算
-
-        if(priceMin <= current) {  //現在金額が price最小値よりも大きければ
-            canBuyList.clear();    //canBuyListをクリア
-            priceList.stream()     //price以上なら trueにして canBuyListに代入
-                .map(price -> (price <= current))
-                .forEach(canBuyList::add);
-        }
+    //====== 購入可能かを判定 ======
+    public synchronized List<Boolean> judgeCanBuy(int input){
+        addMoney(input);    //現在金額に加算
+        canBuyList.clear(); //canBuyListをクリア
+        priceList.stream()  //price以上なら trueにして canBuyListに代入
+            .map(price -> (price <= current))
+            .forEach(canBuyList::add);
 
         return canBuyList;
     }//judgeCanBuy()
 
+    //====== 購入処理 ======
     public void doBuy(int index) {
         buyDrink = drinkList.get(index); //購入品
         int priceDrink = priceList.get(index);  //購入額
@@ -65,6 +58,14 @@ public class VenderCalc {
 //        System.out.println("canBuyList:" + canBuyList);
     }//doBuy()
 
+    //====== 返金処理 ======
+    public void returnMoney() {
+        int temp = current;
+        this.current = 0;
+        judgeCanBuy(0);
+        this.input = temp;
+    }//returnMoney
+
     //====== getter ======
     public int getCurrent() {
         return current;
@@ -78,6 +79,10 @@ public class VenderCalc {
         return buyDrink;
     }
 
+    public List<String> getDrinkList() {
+        return drinkList;
+    }
+
     public List<Boolean> getCanBuyList() {
         return canBuyList;
     }
@@ -86,15 +91,11 @@ public class VenderCalc {
         return didBuyList;
     }
 
-    public List<String> getDrinkList() {
-        return drinkList;
-    }
-
-    //====== Test main() ======
-    public static void main(String[] args) {
-        var data = new DrinkData();
-        var here = new VenderCalc(data);
-
+//    //====== Test main() ======
+//    public static void main(String[] args) {
+//        var data = new DrinkData();
+//        var here = new VenderCalc(data);
+//
 //        //---- Test constructor ----
 //        System.out.println("drinkList: " + here.drinkList);
 //        System.out.println("priceList: " + here.priceList);
@@ -113,13 +114,13 @@ public class VenderCalc {
 //                System.out.printf("current: %3d | canBuyList: %s \n",
 //                    input, here.canBuyList);
 //            });
-
-        //---- Test doBuy() ----
-        here.current = 700;
-        int[] indexAry = { 1, 4, 0, 2, 3};
-        Arrays.stream(indexAry)
-            .forEach(here::doBuy);
-    }//main()
+//
+//        //---- Test doBuy() ----
+//        here.current = 700;
+//        int[] indexAry = { 1, 4, 0, 2, 3};
+//        Arrays.stream(indexAry)
+//            .forEach(here::doBuy);
+//    }//main()
 
 }//class
 

@@ -23,6 +23,9 @@ public class VenderParse {
             calc.doBuy(index);
             //System.out.println("index: " + index);
             //System.out.println(calc.getDrinkList().get(index));
+
+        } else if(order.equals("finish")) {
+            calc.returnMoney();
         }
     }//parseOrder()
 
