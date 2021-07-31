@@ -91,11 +91,13 @@ public class MainVenderServlet extends HttpServlet {
         int current = calc.getCurrent();
         String msg = mess.getMsg();
         List<Boolean> canBuyList = calc.getCanBuyList();
+        List<String> didBuyList = calc.getDidBuyList();
 
+        request.setAttribute("data", data);
         request.setAttribute("current", current);
         request.setAttribute("msg", msg);
-        request.setAttribute("data", data);
         request.setAttribute("canBuyList", canBuyList);
+        request.setAttribute("didBuyList", didBuyList);
 
         dis.forward(request, response);
     }//doGet()
