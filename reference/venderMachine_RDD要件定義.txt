@@ -72,18 +72,12 @@ View -> Servlet
  */
 
 View <- Servlet
-  int current
-  List<Boolean> canBuyList,
+session.setAttribute("locale", locale.toString());
+session.setAttribute("drinkList", drinkList);
+session.setAttribute("priceList", priceList);
+session.setAttribute("EX_RATE", EX_RATE);
+request.setAttribute("current", current);
+request.setAttribute("msg", msg);
+request.setAttribute("canBuyList", canBuyList);
+request.setAttribute("didBuyList", didBuyList);
 
-◆購入処理
-*引数: int index
-*メソッド: calc.doBuy(index)
-*購入品: String buyDrink = drinkList.get(index);
-*価格:   int priceDrink = priceList.get(index);
-*
-*現在金額の差引: current -= priceDrink;
-*購入品のリスト追加: List<String> didBuy
-*                 didBuy.add(buyDrink);
-*購入品の表示: mess.viewBuy(buyDrink);
-*             StringBuffer buf;
-*             buf.append(buyDrink);
