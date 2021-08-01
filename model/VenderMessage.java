@@ -1,31 +1,57 @@
 package model;
 
-public class VenderMessage {
-    String msg;
+import java.util.Locale;
 
-    public String buildMsg(String order, VenderCalc calc) {
+public class VenderMessage {
+    private String msg;  //表示メッセージ
+    private final double EX_RATE;//為替レート
+
+    public VenderMessage(double EX_RATE) {
+        this.EX_RATE = EX_RATE;
+    }
+
+    public String buildMsg(String order, Locale locale, VenderCalc calc) {
         if(order.startsWith("input")) {
-            msg = String.format("%d円が入りました。 \n",
-                calc.getInput());
-        }
+            if(locale.toString().equals("ja")) {
+                msg = String.format("%d円が入りました。 \n",
+                        calc.getInput());
+            } else {
+                msg = String.format("＄%.1f coins have been inserted. \n",
+                        calc.getInput() / EX_RATE);
+            }
+        }//if input
 
         if(order.startsWith("req")) {
-            msg = String.format("%sを購入しました。 \n",
-                calc.getBuyDrink());
-        }
+            if(locale.toString().equals("ja")) {
+                msg = String.format("%sを購入しました。 \n",
+                        calc.getBuyDrink());
+            } else {
+                msg = String.format("%s have been purchased. \n",
+                        calc.getBuyDrink());
+            }
+        }//if req
 
         if(order.equals("finish")) {
-            msg = String.format("%d円を返金しました。\nありがとうございました。\n",
-                calc.getInput());
-        }
+            if(locale.toString().equals("ja")) {
+                msg = String.format("%d円を返金しました。 ありがとうございました。\n",
+                        calc.getInput());
+            } else {
+                msg = String.format("＄%.1f coins have been returned. Thank you. \n",
+                        calc.getInput() / EX_RATE);
+            }
+        }//if finish
 
         return msg;
     }//buildMsg()
 
-    public String getMsg() {
+    public String getMsg(Locale locale) {
         if(msg == null) {
-            msg = "コインを入れてください。\n";
-        }
+            if(locale.toString().equals("ja")) {
+                msg = "コインを入れてください。\n";
+            } else {
+                msg = "Please insert coins. \n";
+            }
+        }//if null
 
         return msg;
     }//getMsg()

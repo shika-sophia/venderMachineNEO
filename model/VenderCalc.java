@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 public class VenderCalc {
@@ -14,8 +15,8 @@ public class VenderCalc {
     private volatile String buyDrink;//購入品の名前
     private int listSize;//drinkListの要素数
 
-    public VenderCalc(DrinkData data) {
-        this.drinkList = data.getDrinkList();
+    public VenderCalc(DrinkData data, Locale locale) {
+        this.drinkList = data.getDrinkList(locale);
         this.priceList = data.getPriceList();
         this.current = 0;
         this.listSize = drinkList.size();
@@ -49,13 +50,6 @@ public class VenderCalc {
 
         didBuyList.add(buyDrink); //購入リストに追加
         judgeCanBuy(-priceDrink); //現在金額から購入額をマイナス
-
-//        //---- Test print ----
-//        System.out.println("current: " + current);
-//        System.out.printf("buy (%d)%s: %d \n",
-//            index, buyDrink, priceDrink);
-//        System.out.println("didBuyList:" + didBuyList);
-//        System.out.println("canBuyList:" + canBuyList);
     }//doBuy()
 
     //====== 返金処理 ======
@@ -89,6 +83,10 @@ public class VenderCalc {
 
     public List<String> getDidBuyList() {
         return didBuyList;
+    }
+
+    public void setDrinkLocale(DrinkData data, Locale locale) {
+        this.drinkList = data.getDrinkList(locale);
     }
 
 //    //====== Test main() ======
@@ -141,6 +139,13 @@ current: 120 | canBuyList: [false, true, true, false, true]
 current: 200 | canBuyList: [true, true, true, true, true]
 
 //---- Test doBuy() ----
+//        //---- Test print ----
+//        System.out.println("current: " + current);
+//        System.out.printf("buy (%d)%s: %d \n",
+//            index, buyDrink, priceDrink);
+//        System.out.println("didBuyList:" + didBuyList);
+//        System.out.println("canBuyList:" + canBuyList);
+
 current: 590
 buy (1)コーラ: 110
 didBuyList:[コーラ]

@@ -12,13 +12,13 @@ public class VenderParse {
 
     public void parseOrder(String order, VenderCalc calc) {
         if(order.startsWith("input")) {
-            order = order.replaceAll("input", "");
+            order = order.replaceAll("input", "").trim();
             int input = Integer.parseInt(order);
             calc.judgeCanBuy(input);
             //System.out.println("input: " + input);
 
         } else if(order.startsWith("req")){
-            order = order.replaceAll("req", "");
+            order = order.replaceAll("req", "").trim();
             int index = Integer.parseInt(order);
             calc.doBuy(index);
             //System.out.println("index: " + index);

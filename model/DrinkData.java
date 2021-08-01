@@ -13,10 +13,11 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class DrinkData {
     //---- define drinkList ----
-    private List<String> drinkList = new ArrayList<>(
+    private List<String> drinkListJp = new ArrayList<>(
         Arrays.asList(
             "コーヒー",
             "コーラ",
@@ -25,25 +26,35 @@ public class DrinkData {
             "ウォーター"
         ));
 
+    //---- define drinkList as Locale en ----
+    private List<String> drinkListEn = new ArrayList<>(
+        Arrays.asList(
+            "Coffee",
+            "Coca-Cola",
+            "Orange-Juce",
+            "Red-Tea",
+            "Water"
+        ));
+
     //---- define priceList ----
     private List<Integer> priceList = new ArrayList<>(
         Arrays.asList(130, 110, 110, 130, 100));
 
     //====== getter, add() ======
-    public List<String> getDrinkList() {
+    public List<String> getDrinkList(Locale locale) {
+        List<String> drinkList;
+
+        if(locale.toString().equals("ja")) {
+            drinkList = drinkListJp;
+        } else {
+            drinkList = drinkListEn;
+        }
+
         return drinkList;
-    }
+    }//getDrinkList(Locale)
 
     public List<Integer> getPriceList() {
         return priceList;
-    }
-
-    public void addDrinkList(String drink) {
-        this.drinkList.add(drink);
-    }
-
-    public void addPriceList(Integer price) {
-        this.priceList.add(price);
     }
 
 }//class
