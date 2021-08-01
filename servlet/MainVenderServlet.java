@@ -92,8 +92,8 @@ public class MainVenderServlet extends HttpServlet {
     protected VenderMessage mess;
     protected VenderParse parse;
     protected RequestDispatcher dis;
-    protected Locale locale;
     protected HttpSession session;
+    protected Locale locale;
     protected final double EX_RATE = 100d;//為替レート 1$=100円
     private boolean init = true;  //doGet()の初回か
 
@@ -101,8 +101,7 @@ public class MainVenderServlet extends HttpServlet {
             throws ServletException {
         super.init(config);
         //this.locale = new Locale("en");
-        this.locale = new Locale(
-               Locale.getDefault().getLanguage());
+        this.locale = Locale.getDefault();
         this.data = new DrinkData();
         this.calc = new VenderCalc(data, locale);
         this.mess = new VenderMessage(EX_RATE);
@@ -119,24 +118,22 @@ public class MainVenderServlet extends HttpServlet {
             this.locale = request.getLocale();
             calc.setDrinkLocale(data, locale);
 
-            this.init = false;
-        }
-
-        if(session == null) {
             this.session = request.getSession();
+            List<String> drinkList = data.getDrinkList(locale);
+            List<Integer> priceList = data.getPriceList();
+            session.setAttribute("locale", locale.toString());
+            session.setAttribute("EX_RATE", EX_RATE);
+            session.setAttribute("drinkList", drinkList);
+            session.setAttribute("priceList", priceList);
+            
+            this.init = false;
         }
 
         int current = calc.getCurrent();
         String msg = mess.getMsg(locale);
-        List<String> drinkList = data.getDrinkList(locale);
-        List<Integer> priceList = data.getPriceList();
         List<Boolean> canBuyList = calc.getCanBuyList();
         List<String> didBuyList = calc.getDidBuyList();
 
-        session.setAttribute("locale", locale.toString());
-        session.setAttribute("drinkList", drinkList);
-        session.setAttribute("priceList", priceList);
-        session.setAttribute("EX_RATE", EX_RATE);
         request.setAttribute("current", current);
         request.setAttribute("msg", msg);
         request.setAttribute("canBuyList", canBuyList);
