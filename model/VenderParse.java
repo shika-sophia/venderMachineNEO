@@ -5,6 +5,8 @@
  *        moneyのinput, 数字は投入金額
  * @value req0, req1, req2, req3, req4
  *        コーヒー, コーラ, オレンジジュース, 紅茶, ウォーターの注文
+ * @value finish
+ *        返金ボタン
  */
 package model;
 

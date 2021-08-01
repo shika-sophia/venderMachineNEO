@@ -12,7 +12,7 @@ public class VenderMessage {
 
     public String buildMsg(String order, Locale locale, VenderCalc calc) {
         if(order.startsWith("input")) {
-            if(locale.toString().equals("ja")) {
+            if(locale.toString().contains("ja")) {
                 msg = String.format("%d円が入りました。 \n",
                         calc.getInput());
             } else {
@@ -22,7 +22,7 @@ public class VenderMessage {
         }//if input
 
         if(order.startsWith("req")) {
-            if(locale.toString().equals("ja")) {
+            if(locale.toString().contains("ja")) {
                 msg = String.format("%sを購入しました。 \n",
                         calc.getBuyDrink());
             } else {
@@ -32,7 +32,7 @@ public class VenderMessage {
         }//if req
 
         if(order.equals("finish")) {
-            if(locale.toString().equals("ja")) {
+            if(locale.toString().contains("ja")) {
                 msg = String.format("%d円を返金しました。 ありがとうございました。\n",
                         calc.getInput());
             } else {

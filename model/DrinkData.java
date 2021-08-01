@@ -44,7 +44,7 @@ public class DrinkData {
     public List<String> getDrinkList(Locale locale) {
         List<String> drinkList;
 
-        if(locale.toString().equals("ja")) {
+        if(locale.toString().contains("ja")) {
             drinkList = drinkListJp;
         } else {
             drinkList = drinkListEn;
