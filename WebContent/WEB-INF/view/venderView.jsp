@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="locale" value="${sessionScope['locale']}" />
+<c:set var="EX_RATE" value="${sessionScope['EX_RATE']}" />
+<c:set var="current" value="${requestScope['current']}" />
 
 <!DOCTYPE html>
 <html>
@@ -9,18 +12,26 @@
 <title>Vender Machine NEO</title>
 </head>
 <body>
-
 <form name="orderForm" action="MainVenderServlet" method="POST">
     <!-- drinkTable -->
     <table id="drinkTable" border="1">
     <tr> <!-- drink section -->
-      <c:forEach var="drink" items="${requestScope['data'].drinkList}" >
+      <c:forEach var="drink" items="${sessionScope['drinkList']}" >
         <td>${drink}</td>
       </c:forEach>
     </tr>
     <tr> <!-- price section -->
-      <c:forEach var="price" items="${requestScope['data'].priceList}" >
-        <td>${price}</td>
+      <c:forEach var="price" items="${sessionScope['priceList']}" >
+        <td>
+          <c:choose>
+            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
+                ${price}円
+            </c:when>
+            <c:otherwise>
+                             ＄${price / EX_RATE}
+            </c:otherwise>
+          </c:choose>
+        </td>
       </c:forEach>
     </tr>
     <tr> <!-- button section -->
@@ -43,28 +54,64 @@
     <table id="inputTable" border="1">
       <tr>
         <td>${requestScope['msg']}</td>
-        <td>${requestScope['current']}</td>
-      </tr>
-      <tr>
         <td>
-          <input type="radio" name="order" value="input10">10
-          <input type="radio" name="order" value="input50">50
-          <input type="radio" name="order" value="input100">100
-          <input type="radio" name="order" value="input500">500
-          <input type="radio" name="order" value="input1000">1000
-        </td>
-        <td>
-          <input type="submit" value="コイン入金" />
+          <c:choose>
+            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
+                ${current}円
+            </c:when>
+            <c:otherwise>
+                             ＄${current / EX_RATE}
+            </c:otherwise>
+          </c:choose>
         </td>
       </tr>
       <tr>
-        <td id="didBuyCell">購入リスト<br />
+        <td>
+          <c:choose>
+            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
+              <c:forEach var="selectValue" items="10, 50, 100, 500, 1000">
+                <input type="radio" name="order" value="input${selectValue}">${selectValue}円
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <c:forEach var="selectValue" items="10, 50, 100, 500, 1000">
+                <input type="radio" name="order" value="input${selectValue}">＄${selectValue / EX_RATE}
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
+        </td>
+        <td>
+          <c:choose>
+            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
+                <input type="submit" value="コイン入金" />
+            </c:when>
+            <c:otherwise>
+                <input type="submit" value="COIN  IN " />
+            </c:otherwise>
+          </c:choose>
+        </td>
+      </tr>
+      <tr>
+        <td id="didBuyCell">
+            <c:choose>
+              <c:when test="${locale == 'ja' || locale == 'ja_JP'}">購入リスト<br />
+              </c:when>
+              <c:otherwise>Purchase List: <br /></c:otherwise>
+            </c:choose>
             <c:forEach var="didBuy" items="${requestScope['didBuyList']}">
                 ${didBuy},&thinsp;
             </c:forEach>
         </td>
         <td>
-            <button name="order" value="finish">コイン返金</button>
+          <c:choose>
+            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
+                <button name="order" value="finish">コイン返金</button>
+            </c:when>
+            <c:otherwise>
+                <button name="order" value="finish">COIN OUT</button>
+            </c:otherwise>
+          </c:choose>
+
         </td>
       </tr>
     </table>
@@ -73,17 +120,3 @@
 </body>
 </html>
 
-<!--
-【考察】 JavaScript
-◆<form>内 onsubmit属性
-onsubmit="return document.orderForm.order.value != '' "
-ラジオボタンが未チェックの場合、送信無効。
-購入ボタン時にも作用してしまい、ラジオボタンをチェックしていないと
-ボタンが無効になる。
-
-onsubmit属性を消去すると、
-未チェックのまま入金で order=nullとなり、NullPointerException
-
-<input type="hidden" name="order" value="input0">で解決
-
--->
