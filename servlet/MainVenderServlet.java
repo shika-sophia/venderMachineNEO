@@ -170,7 +170,7 @@ public class MainVenderServlet extends HttpServlet {
 
 @see reference/venderView_localeEn.jpg
 
-【考察】 JavaScript
+JSP【考察】 JavaScript
 ◆<form>内 onsubmit属性
 onsubmit="return document.orderForm.order.value != '' "
 ラジオボタンが未チェックの場合、送信無効。
@@ -182,7 +182,7 @@ onsubmit属性を消去すると、
 
 <input type="hidden" name="order" value="input0">で解決
 
-【考察】Locale対応
+JSP【考察】Locale対応
 Servletから来る localeを元に場合分けして表示したが、
 <c:choose>
   <c:when>
@@ -193,6 +193,6 @@ Servletから来る localeを元に場合分けして表示したが、
 同じページを 日本語/英語に切り替えるのがオブジェクト指向ぽい。
 
 Localeを切り替えても、100円 -> $100になるので、
-缶ジュース１本 $100(１万円)になってしまう。
+缶ジュース１本 $100(=１万円)になってしまう。
 為替レートで調整する計算が必要
 */
