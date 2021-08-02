@@ -1,0 +1,8 @@
+in=Coin IN
+out=Coin OUT
+currency=＄{0}
+language=日本語
+
+#>cd C:\Program Files\pleiades\workspace-web\venderMachineNEO\WebContent\WEB-INF\classes
+#>native2ascii -encoding UTF-8 vender_ja.txt vender_ja.properties
+#>native2ascii -encoding UTF-8 vender_en.txt vender_en.properties

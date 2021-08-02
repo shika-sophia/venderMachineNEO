@@ -1,0 +1,8 @@
+in=コイン投入
+out=コイン返金
+currency={0}円
+language=English
+
+#>cd C:\Program Files\pleiades\workspace-web\venderMachineNEO\WebContent\WEB-INF\classes
+#>native2ascii -encoding UTF-8 vender_ja.txt vender_ja.properties
+#>native2ascii -encoding UTF-8 vender_en.txt vender_en.properties
