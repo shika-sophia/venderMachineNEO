@@ -1,10 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="locale" value="${sessionScope['locale']}" />
 <c:set var="EX_RATE" value="${sessionScope['EX_RATE']}" />
+<c:set var="priceList" value="${requestScope['priceList']}" />
 <c:set var="current" value="${requestScope['current']}" />
+  <c:if test="${locale != 'ja' && locale != 'ja_JP'}">
+    <c:set var="current" value="${current / EX_RATE}" />
+  </c:if>
 <fmt:setLocale value="${locale}" />
 <fmt:setBundle var="bundle" basename="vender" />
 
@@ -15,7 +20,7 @@
 <title>Vender View Bundle</title>
 </head>
 <body>
-<form name="orderForm" action="MainVenderServlet" method="POST">
+<form name="orderForm" action="MainVenderBundleServlet" method="POST">
     <!-- drinkTable -->
     <table id="drinkTable" border="1">
     <tr> <!-- drink section -->
@@ -24,11 +29,11 @@
       </c:forEach>
     </tr>
     <tr> <!-- price section -->
-      <c:forEach var="price" items="${sessionScope['priceList']}" >
+      <c:forEach var="price" items="${sessionScope['priceListStr']}" >
         <td>
-          <fmt:message key="currency" bundle="bundle">
+          <fmt:message key="currency" bundle="${bundle}">
             <fmt:param>
-              <fmt:formatNumber value="${price}" />
+              <fmt:formatNumber value="${price}" maxFractionDigits="2" />
             </fmt:param>
           </fmt:message>
         </td>
@@ -55,63 +60,41 @@
       <tr>
         <td>${requestScope['msg']}</td>
         <td>
-          <c:choose>
-            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
-                ${current}円
-            </c:when>
-            <c:otherwise>
-                             ＄${current / EX_RATE}
-            </c:otherwise>
-          </c:choose>
+          <fmt:message key="currency" bundle="${bundle}">
+            <fmt:param>
+              <fmt:formatNumber value="${current}" maxFractionDigits="2" />
+            </fmt:param>
+          </fmt:message>
         </td>
       </tr>
       <tr>
         <td>
-          <c:choose>
-            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
-              <c:forEach var="selectValue" items="10, 50, 100, 500, 1000">
-                <input type="radio" name="order" value="input${selectValue}">${selectValue}円
-              </c:forEach>
-            </c:when>
-            <c:otherwise>
-              <c:forEach var="selectValue" items="10, 50, 100, 500, 1000">
-                <input type="radio" name="order" value="input${selectValue}">＄${selectValue / EX_RATE}
-              </c:forEach>
-            </c:otherwise>
-          </c:choose>
+           <c:forEach var="select" items="${sessionScope['selectListStr']}" >
+              <input type="radio" name="order" value="input${select}">
+                <fmt:message key="currency" bundle="${bundle}">
+                  <fmt:param>
+                    <fmt:formatNumber value="${select}" maxFractionDigits="2"/>
+                  </fmt:param>
+                </fmt:message>
+            </c:forEach>
         </td>
         <td>
-          <c:choose>
-            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
-                <input type="submit" value="コイン入金" />
-            </c:when>
-            <c:otherwise>
-                <input type="submit" value="COIN  IN " />
-            </c:otherwise>
-          </c:choose>
+          <button type="submit">
+            <fmt:message key="in" bundle="${bundle}" />
+          </button>
         </td>
       </tr>
       <tr>
         <td id="didBuyCell">
-            <c:choose>
-              <c:when test="${locale == 'ja' || locale == 'ja_JP'}">購入リスト<br />
-              </c:when>
-              <c:otherwise>Purchase List: <br /></c:otherwise>
-            </c:choose>
+            <fmt:message key="list" bundle="${bundle}" /><br />
             <c:forEach var="didBuy" items="${requestScope['didBuyList']}">
                 ${didBuy},&thinsp;
             </c:forEach>
         </td>
         <td>
-          <c:choose>
-            <c:when test="${locale == 'ja' || locale == 'ja_JP'}">
-                <button name="order" value="finish">コイン返金</button>
-            </c:when>
-            <c:otherwise>
-                <button name="order" value="finish">COIN OUT</button>
-            </c:otherwise>
-          </c:choose>
-
+          <button name="order" value="finish">
+            <fmt:message key="out" bundle="${bundle}" />
+          </button>
         </td>
       </tr>
     </table>
