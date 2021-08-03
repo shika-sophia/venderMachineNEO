@@ -16,7 +16,7 @@ public class VenderMessage {
                 msg = String.format("%d円が入りました。 \n",
                         calc.getInput());
             } else {
-                msg = String.format("＄%.1f coins have been inserted. \n",
+                msg = String.format("＄%.2f coins have been inserted. \n",
                         calc.getInput() / EX_RATE);
             }
         }//if input
@@ -36,7 +36,7 @@ public class VenderMessage {
                 msg = String.format("%d円を返金しました。 ありがとうございました。\n",
                         calc.getInput());
             } else {
-                msg = String.format("＄%.1f coins have been returned. Thank you. \n",
+                msg = String.format("＄%.2f coins have been returned. Thank you. \n",
                         calc.getInput() / EX_RATE);
             }
         }//if finish

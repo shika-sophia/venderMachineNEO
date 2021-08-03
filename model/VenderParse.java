@@ -15,6 +15,11 @@ public class VenderParse {
     public void parseOrder(String order, VenderCalc calc) {
         if(order.startsWith("input")) {
             order = order.replaceAll("input", "").trim();
+
+            if(order.contains(".")) {
+                order = order.replace(".", "");
+            }
+
             int input = Integer.parseInt(order);
             calc.judgeCanBuy(input);
             //System.out.println("input: " + input);
