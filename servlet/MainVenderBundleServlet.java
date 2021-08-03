@@ -1,13 +1,16 @@
 /**
- * @title venderMachineNEO / servlet / MainVenderServlet.java
+ * @title venderMachineNEO / servlet / MainVenderBundleServlet.java
  * @content 自動販売機のロジック再現
  *          stylesheetなどの View関連は未実装
  *          Locale対応: 日本語 ja_JP, 英語 en
+ *          Bundle対応で jsp内の分岐を最小限にし、Localeで表示切替を可能にした。
+ *          その分、DrinkDataに Locale分岐を記述。
  * @see reference / venderMachine_RDD要件定義.txt
  *
  * @package ---- servlet ----
  * @class EncodingFilter / jsp,Servletを「UTF-8」でencodeing
- * @class MainVenderServlet / ◆EntryPoint
+ * @class MainVenderServlet / ◆EntryPoint 〔旧版〕
+ * @class MainVenderBundleServlet / ◆EntryPoint 〔新版〕
  *        / #DrinkData data,
  *          #VenderCalc calc,
  *          #VenderMessage mess,
@@ -24,9 +27,15 @@
  *
  * @package ---- model ----
  * @class DrinkData / ドリンクデータの定義
- *        / List<String> drinkListJp,
+ *        / Locale locale,
+ *          double EX_RATE,
+ *          List<String> drinkListJp,
  *          List<String> drinkListEn,
- *          List<Integer> priceList /
+ *          List<Integer> priceList
+ *          List<String> priceListStr
+ *          List<Integer> selsctList
+ *          List<String> selectListStr /
+ *        -listToStr(List<Integer>,List<String>,Locale,double)
  * @class VenderCalc / マネー管理、販売ロジック
  *        / List<String> drinkList,
  *          List<Integer> priceList,
@@ -49,7 +58,9 @@
  *        parseOrder(String order, VenderCalc calc)
  *
  * @package ---- WebContent/WEB-INF/view ----
- * @file venderView.jsp
+ * @file venderView.jsp 〔旧版〕
+ * @file venderViewBundle.jsp 〔新版〕
+ *
  * @package ---- WebContent/WEB-INF/classes ----
  * @file vender_ja.properties //Bundle用プロパティファイル
  * @file vender_en.properties //下記 txtファイルを UTF-8でエンコード
@@ -65,10 +76,6 @@
  * @see reference/venderView_button.jpg
  * @see reference/venderView_returnMoney.jpg
  * @see reference/venderView_localeEn.jpg
- *
- * @see venderBundle.jsp / MainVenderBungleServlet.java
- * => Bundle対応の新版 jsp/Servletを作成。
- *
  * @author shika
  * @date 2021-07-25 ～ 08-03
  */
@@ -93,8 +100,8 @@ import model.VenderCalc;
 import model.VenderMessage;
 import model.VenderParse;
 
-@WebServlet("/MainVenderServlet")
-public class MainVenderServlet extends HttpServlet {
+@WebServlet("/MainVenderBundleServlet")
+public class MainVenderBundleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected DrinkData data;
     protected VenderCalc calc;
@@ -109,32 +116,35 @@ public class MainVenderServlet extends HttpServlet {
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config);
-        //this.locale = new Locale("en");
-        this.locale = Locale.getDefault();
+        this.locale = new Locale("en");
+        //this.locale = Locale.getDefault();
         this.data = new DrinkData();
         this.calc = new VenderCalc(data, locale);
         this.mess = new VenderMessage(EX_RATE);
         this.parse = new VenderParse();
 
         //---- forward path ----
-        String path = "/WEB-INF/view/venderView.jsp";
+        String path = "/WEB-INF/view/venderViewBundle.jsp";
         this.dis = config.getServletContext().getRequestDispatcher(path);
     }//init()
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if(init) { //doGet()初回のみ
-            this.locale = request.getLocale();
-            calc.setDrinkLocale(data, locale);
+            //this.locale = request.getLocale();
+            //calc.setDrinkLocale(data, locale);
 
             this.session = request.getSession();
             List<String> drinkList = data.getDrinkList(locale);
-            List<Integer> priceList = data.getPriceList();
+            List<String> priceListStr = data.getPriceListStr(locale, EX_RATE);
+            List<Integer> selectListInt = data.getSelectList();
+            List<String> selectListStr = data.getSelectListStr(locale, EX_RATE);
             session.setAttribute("locale", locale.toString());
             session.setAttribute("EX_RATE", EX_RATE);
             session.setAttribute("drinkList", drinkList);
-            session.setAttribute("priceList", priceList);
-
+            session.setAttribute("priceListStr", priceListStr);
+            session.setAttribute("selectListInt", selectListInt);
+            session.setAttribute("selectListStr", selectListStr);
             this.init = false;
         }
 
@@ -162,46 +172,3 @@ public class MainVenderServlet extends HttpServlet {
 
 }//class
 
-/*
-【設定】
-◆Locale対応
-＊英語版の表示
-・//this.locale = new Locale("en");を ONにする。
-   this.locale = new Locale(
-       Locale.getDefault().getLanguage());を OFFにする。
-・doGet()内 if(init){ }の
-    this.locale = request.getLocale();
-    calc.setDrinkLocale(data, locale);
-を OFFにする。
-
-@see reference/venderView_localeEn.jpg
-
-JSP【考察】 JavaScript
-◆<form>内 onsubmit属性
-onsubmit="return document.orderForm.order.value != '' "
-ラジオボタンが未チェックの場合、送信無効。
-購入ボタン時にも作用してしまい、ラジオボタンをチェックしていないと
-ボタンが無効になる。
-
-onsubmit属性を消去すると、
-未チェックのまま入金で order=nullとなり、NullPointerException
-
-<input type="hidden" name="order" value="input0">で解決
-
-JSP【考察】Locale対応
-Servletから来る localeを元に場合分けして表示したが、
-<c:choose>
-  <c:when>
-  <c:otherwise>
-が何度も出てきて可読性に欠き、別ページにしたほうが見やすい。
-
-それか<fmt:Bundle>で propertyファイルの切り替えをして
-同じページを 日本語/英語に切り替えるのがオブジェクト指向ぽい。
-
-Localeを切り替えても、100円 -> $100になるので、
-缶ジュース１本 $100(=１万円)になってしまう。
-為替レートで調整する計算が必要
-
-=> Bundle対応の新版 jsp/Servletを作成。
-@see venderBundle.jsp / MainVenderBungleServlet.java
-*/
