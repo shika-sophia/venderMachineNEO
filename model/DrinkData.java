@@ -68,10 +68,6 @@ public class DrinkData {
     }
 
     //====== for MainVenderBundleServlet ======
-    public List<Integer> getSelectList() {
-        return selectList;
-    }
-
     public List<String> getPriceListStr(Locale locale, double EX_RATE) {
         return listIntToStr(priceList, priceListStr, locale, EX_RATE);
     }//getPriceListStr()
