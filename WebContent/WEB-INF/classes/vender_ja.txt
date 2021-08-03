@@ -1,6 +1,7 @@
 in=コイン投入
 out=コイン返金
 currency={0}円
+list=購入リスト:
 language=English
 
 #>cd C:\Program Files\pleiades\workspace-web\venderMachineNEO\WebContent\WEB-INF\classes

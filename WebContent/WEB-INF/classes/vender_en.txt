@@ -1,6 +1,7 @@
 in=Coin IN
 out=Coin OUT
 currency=＄{0}
+list=Purchase List:
 language=日本語
 
 #>cd C:\Program Files\pleiades\workspace-web\venderMachineNEO\WebContent\WEB-INF\classes
