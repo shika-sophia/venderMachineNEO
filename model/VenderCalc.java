@@ -60,6 +60,22 @@ public class VenderCalc {
         this.input = temp;
     }//returnMoney
 
+    //====== Locale変更処理 ======
+    public void restractDidList(DrinkData data, Locale locale) {
+        List<Integer> didIndexList = new ArrayList<>();
+
+        //didBuyListは 旧ロケールdrinkListの どのindexか
+        didBuyList.stream()
+            .map(drink -> drinkList.indexOf(drink))
+            .forEach(didIndexList::add);
+        didBuyList.clear();
+
+        //drinkListのロケール変更、indexで取得し didBuyListに再代入
+        setDrinkLocale(data, locale);
+        didIndexList.stream()
+            .forEach(index -> didBuyList.add(drinkList.get(index)));
+    }//restractList()
+
     //====== getter ======
     public int getCurrent() {
         return current;

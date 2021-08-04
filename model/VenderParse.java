@@ -10,6 +10,8 @@
  */
 package model;
 
+import java.util.Locale;
+
 public class VenderParse {
 
     public void parseOrder(String order, VenderCalc calc) {
@@ -35,6 +37,17 @@ public class VenderParse {
             calc.returnMoney();
         }
     }//parseOrder()
+
+    public Locale buildLocale(String language) {
+        String parsedLanguage = "";
+        if(language.equals("日本語")) {
+            parsedLanguage = "ja";
+        } else if(language.equals("English")){
+            parsedLanguage = "en";
+        }
+
+        return new Locale(parsedLanguage);
+    }//buildLocale()
 
 //    //====== Test main() ======
 //    public static void main(String[] args) {

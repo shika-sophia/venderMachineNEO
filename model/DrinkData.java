@@ -87,6 +87,7 @@ public class DrinkData {
                 || this.EX_RATE != EX_RATE) {
             this.locale = locale;
             this.EX_RATE = EX_RATE;
+            listStr.clear(); //空でなく変更によって作り直す場合にクリア
 
             //---- Localeによる分岐 ----
             if(locale.toString().contains("ja")) {

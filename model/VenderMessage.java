@@ -56,6 +56,14 @@ public class VenderMessage {
         return msg;
     }//getMsg()
 
+    public void restractLocale(Locale locale) {
+        if(locale.toString().contains("ja")) {
+            msg = "日本語に変更しました。";
+        } else {
+            msg = "Language has been changed to English.";
+        }
+    }//restractLocale()
+
 //    //====== Test main() ====
 //    public static void main(String[] args) {
 //        var data = new DrinkData();
