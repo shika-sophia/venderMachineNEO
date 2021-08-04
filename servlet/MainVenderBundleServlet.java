@@ -20,10 +20,12 @@
  *          #HttpSession session
  *          #double EX_RATE 為替レート 1$=100円
  *          -boolean init /
- *        init() フィールド初期化
- *        doGet()  jspの表示に必要な値の取得し、 forward
- *        doPost() jspから order取得、orderを解析しロジックに渡す
- * @class VenderFinishServlet extends MainVenderServlet
+ *        +init() フィールド初期化
+ *        #doGet()  jspの表示に必要な値の取得し、 forward
+ *        #doPost() jspから order取得、orderを解析しロジックに渡す
+ *        #setSession(HttpServletRequest)
+ *        #setLocale(Locale)
+ * @class ChangeLanguageServlet extends MainVenderServlet
  *
  * @package ---- model ----
  * @class DrinkData / ドリンクデータの定義
@@ -48,14 +50,17 @@
  *        doBuy(int index)       //実際の購入処理
  *        returnMoney()          //返金処理
  *        -addMoney(int input)   //現在金額の加算処理
+ *        restractDidList(data,locale)//ロケール変更処理
  * @class VenderMessage / 表示メッセージの管理
  *        / String msg,
  *          double EX_RATE /
  *        buildMsg(String order, VenderCalc calc)
  *        getMsg()
+ *        restractMsg(Locale)
  * @class VenderParse / orderの解析
  *        //
  *        parseOrder(String order, VenderCalc calc)
+ *        parseLocale(String language)
  *
  * @package ---- WebContent/WEB-INF/view ----
  * @file venderView.jsp 〔旧版〕
@@ -77,7 +82,7 @@
  * @see reference/venderView_returnMoney.jpg
  * @see reference/venderView_localeEn.jpg
  * @author shika
- * @date 2021-07-25 ～ 08-03
+ * @date 2021-07-25 ～ 08-04
  */
 
 package servlet;
@@ -133,16 +138,7 @@ public class MainVenderBundleServlet extends HttpServlet {
         if(init) { //doGet()初回のみ
             //this.locale = request.getLocale();
             //calc.setDrinkLocale(data, locale);
-
-            this.session = request.getSession();
-            List<String> drinkList = data.getDrinkList(locale);
-            List<String> priceListStr = data.getPriceListStr(locale, EX_RATE);
-            List<String> selectListStr = data.getSelectListStr(locale, EX_RATE);
-            session.setAttribute("locale", locale.toString());
-            session.setAttribute("EX_RATE", EX_RATE);
-            session.setAttribute("drinkList", drinkList);
-            session.setAttribute("priceListStr", priceListStr);
-            session.setAttribute("selectListStr", selectListStr);
+            setSession(request);
             this.init = false;
         }
 
@@ -159,6 +155,18 @@ public class MainVenderBundleServlet extends HttpServlet {
         dis.forward(request, response);
     }//doGet()
 
+    protected void setSession(HttpServletRequest request) {
+        this.session = request.getSession();
+        List<String> drinkList = data.getDrinkList(locale);
+        List<String> priceListStr = data.getPriceListStr(locale, EX_RATE);
+        List<String> selectListStr = data.getSelectListStr(locale, EX_RATE);
+        session.setAttribute("locale", locale.toString());
+        session.setAttribute("EX_RATE", EX_RATE);
+        session.setAttribute("drinkList", drinkList);
+        session.setAttribute("priceListStr", priceListStr);
+        session.setAttribute("selectListStr", selectListStr);
+    }//setSession()
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String order = (String) request.getParameter("order");
@@ -167,6 +175,10 @@ public class MainVenderBundleServlet extends HttpServlet {
 
         doGet(request, response);
     }//doPost()
+
+    protected void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
 }//class
 

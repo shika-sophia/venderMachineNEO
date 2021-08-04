@@ -20,7 +20,6 @@
  *        init() フィールド初期化
  *        doGet()  jspの表示に必要な値の取得し、 forward
  *        doPost() jspから order取得、orderを解析しロジックに渡す
- * @class VenderFinishServlet extends MainVenderServlet
  *
  * @package ---- model ----
  * @class DrinkData / ドリンクデータの定義
