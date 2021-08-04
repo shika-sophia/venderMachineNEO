@@ -98,6 +98,11 @@
         </td>
       </tr>
     </table>
+<br />
+    <button name="language" value="<fmt:message key="language" bundle="${bundle}" />"
+      formaction="ChangeLanguageServlet" formmethod="POST">
+        <fmt:message key="language" bundle="${bundle}" />
+    </button>
     <input type="hidden" name="order" value="input0">
 </form>
 </body>
