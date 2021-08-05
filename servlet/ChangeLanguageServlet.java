@@ -53,5 +53,4 @@ public class ChangeLanguageServlet extends MainVenderBundleServlet {
 * subServletから呼び出してみたが、解決せず。
 * dis.forward(request, response);を subServletからしてみたが、解決せず。
 *
-*
 */
