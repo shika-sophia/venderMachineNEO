@@ -141,16 +141,7 @@ public class MainVenderBundleServlet extends HttpServlet {
             setSession(request);
             this.init = false;
         }
-
-        int current = calc.getCurrent();
-        String msg = mess.getMsg(locale);
-        List<Boolean> canBuyList = calc.getCanBuyList();
-        List<String> didBuyList = calc.getDidBuyList();
-
-        request.setAttribute("current", current);
-        request.setAttribute("msg", msg);
-        request.setAttribute("canBuyList", canBuyList);
-        request.setAttribute("didBuyList", didBuyList);
+        setRequestScope(request);
 
         dis.forward(request, response);
     }//doGet()
@@ -166,6 +157,18 @@ public class MainVenderBundleServlet extends HttpServlet {
         session.setAttribute("priceListStr", priceListStr);
         session.setAttribute("selectListStr", selectListStr);
     }//setSession()
+
+    protected void setRequestScope(HttpServletRequest request) {
+        int current = calc.getCurrent();
+        String msg = mess.getMsg(locale);
+        List<Boolean> canBuyList = calc.getCanBuyList();
+        List<String> didBuyList = calc.getDidBuyList();
+
+        request.setAttribute("current", current);
+        request.setAttribute("msg", msg);
+        request.setAttribute("canBuyList", canBuyList);
+        request.setAttribute("didBuyList", didBuyList);
+    }//setRequestScope()
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

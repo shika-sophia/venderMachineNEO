@@ -42,4 +42,16 @@ public class ChangeLanguageServlet extends MainVenderBundleServlet {
 * 新たに取得しているはずの current, didBuyListなども
 * 変更後は 0になっている問題もある。
 * Servletが内部プールに保存されていることが原因か
+*
+* フィールドからの参照(読み取り)はできるが、
+* フィールド値の変更(書き込み)は反映されていないようだ。
+* Servletの extends ではなく、同一Servlet内からならできそうだが、
+* フィールドを他Servletと共有できなくなる。
+*
+* requestScopeの内容も反映されていないので
+* super.setRequestScope(HttpServletRequest)のメソッド抽出をし、
+* subServletから呼び出してみたが、解決せず。
+* dis.forward(request, response);を subServletからしてみたが、解決せず。
+*
+*
 */
