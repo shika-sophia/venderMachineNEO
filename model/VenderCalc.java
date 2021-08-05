@@ -108,7 +108,8 @@ public class VenderCalc {
 //    //====== Test main() ======
 //    public static void main(String[] args) {
 //        var data = new DrinkData();
-//        var here = new VenderCalc(data);
+//        Locale locale = new Locale("en");
+//        var here = new VenderCalc(data, locale);
 //
 //        //---- Test constructor ----
 //        System.out.println("drinkList: " + here.drinkList);
@@ -134,6 +135,13 @@ public class VenderCalc {
 //        int[] indexAry = { 1, 4, 0, 2, 3};
 //        Arrays.stream(indexAry)
 //            .forEach(here::doBuy);
+//
+//        //---- Test restractDidList() ----
+//        System.out.printf("Locale %s: %s \n", locale, here.didBuyList);
+//
+//        Locale localeNext = new Locale("ja");
+//        here.restractDidList(data, localeNext);
+//        System.out.printf("Locale %s: %s \n", localeNext, here.didBuyList);
 //    }//main()
 
 }//class
@@ -183,4 +191,7 @@ buy (3)紅茶: 130
 didBuyList:[コーラ, ウォーター, コーヒー, オレンジジュース, 紅茶]
 canBuyList:[false, true, true, false, true]
 
+//---- Test doBuy(), restractDidList() ----
+Locale en: [Coca-Cola, Water, Coffee, Orange-Juce, Red-Tea]
+Locale ja: [コーラ, ウォーター, コーヒー, オレンジジュース, 紅茶]
 */
