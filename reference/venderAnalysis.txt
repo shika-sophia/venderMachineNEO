@@ -1,0 +1,150 @@
+/**
+ * 各所に記述したメモや考察を一箇所に集約
+ */
+ ◆データ遷移
+View -> Servlet
+  int input,
+  String order {各商品の name=""属性 | おつり }
+/**
+ * @param String order
+ * @content jspから渡されるボタンクリックの内容
+ * @value input10, input50, input100, input500, input1000
+ *        moneyのinput, 数字は投入金額
+ * @value req0, req1, req2, req3, req4
+ *        コーヒー, コーラ, オレンジジュース, 紅茶, ウォーターの注文
+ */
+
+＊View <- Servlet 〔旧版〕
+session.setAttribute("locale", locale.toString());
+session.setAttribute("drinkList", drinkList);
+session.setAttribute("priceList", priceList);
+session.setAttribute("EX_RATE", EX_RATE);
+request.setAttribute("current", current);
+request.setAttribute("msg", msg);
+request.setAttribute("canBuyList", canBuyList);
+request.setAttribute("didBuyList", didBuyList);
+
+＊venderViewBundle <- MainVenderBundleServlet 〔新版〕
+session.setAttribute("locale", locale.toString());
+session.setAttribute("EX_RATE", EX_RATE);
+session.setAttribute("drinkList", drinkList);
+session.setAttribute("priceListStr", priceListStr);
+session.setAttribute("selectListStr", selectListStr);
+request.setAttribute("current", current);
+request.setAttribute("msg", msg);
+request.setAttribute("canBuyList", canBuyList);
+request.setAttribute("didBuyList", didBuyList);
+
+/*
+【設定】
+◆Locale対応
+＊英語版の表示
+・//this.locale = new Locale("en");を ONにする。
+   this.locale = new Locale(
+       Locale.getDefault().getLanguage());を OFFにする。
+・doGet()内 if(init){ }の
+    this.locale = request.getLocale();
+    calc.setDrinkLocale(data, locale);
+を OFFにする。
+
+@see reference/venderView_localeEn.jpg
+
+JSP【考察】 JavaScript
+◆<form>内 onsubmit属性
+onsubmit="return document.orderForm.order.value != '' "
+ラジオボタンが未チェックの場合、送信無効。
+購入ボタン時にも作用してしまい、ラジオボタンをチェックしていないと
+ボタンが無効になる。
+
+onsubmit属性を消去すると、
+未チェックのまま入金で order=nullとなり、NullPointerException
+
+<input type="hidden" name="order" value="input0">で解決
+
+JSP【考察】Locale対応
+Servletから来る localeを元に場合分けして表示したが、
+<c:choose>
+  <c:when>
+  <c:otherwise>
+が何度も出てきて可読性に欠き、別ページにしたほうが見やすい。
+
+それか<fmt:Bundle>で propertyファイルの切り替えをして
+同じページを 日本語/英語に切り替えるのがオブジェクト指向ぽい。
+
+Localeを切り替えても、100円 -> $100になるので、
+缶ジュース１本 $100(=１万円)になってしまう。
+為替レートで調整する計算が必要
+
+=> Bundle対応の新版 jsp/Servletを作成。
+@see venderBundle.jsp / MainVenderBungleServlet.java
+*/
+/*
+【考察】 Servletの継承
+* フィールドを共有したかったので Servletを継承したのだが、
+* sessionフィールドは subの Servletから利用すると nullになるので、
+* super.setSession()内で request.getSession()をして生成した。
+*
+* this.localeのように subからフィールドを変更しても反映されないので
+* super.localeも同様、
+* super.setLocale(locale);で変更できたが、
+* mess, calcの情報は 旧Localeのまま。
+*
+* 新たに取得しているはずの current, didBuyListなども
+* 変更後は 0になっている問題もある。
+* Servletが内部プールに保存されていることが原因か
+*
+* フィールドからの参照(読み取り)はできるが、
+* フィールド値の変更(書き込み)は反映されていないようだ。
+* Servletの extends ではなく、同一Servlet内からならできそうだが、
+* フィールドを他Servletと共有できなくなる。
+*
+* requestScopeの内容も反映されていないので
+* super.setRequestScope(HttpServletRequest)のメソッド抽出をし、
+* subServletから呼び出してみたが、解決せず。
+* dis.forward(request, response);を subServletからしてみたが、解決せず。
+*
+* ＊volatile
+* superのフィールドに volatile をつけてみたが、
+* volatile: 変更しやすい変数であることを JVM(=Java仮想マシン)に伝え、
+* コンパイラによる最適化を停止する命令。
+* コンパイラによる最適化: 一度読み込んだ値をキャッシュし、それを各インスタンス上のスタック・メモリに保存し
+* 二度目以降は そこから読み込む。
+* volatileによって、毎回 JVMから最新の値を読み込むようにする。
+*
+* => 結果、上記のsuperフィールドの問題は解決せず。
+* VenderCalc.restractDidList()の単体テストでは、
+* 最新Localeによる Listの書き換えはちゃんとできていたので、
+* Java実行系 JVMはすでにちゃんと機能している。
+*
+* 【Servletのシングルインスタンス・マルチスレッド機能】〔DS42 / p285〕
+* この問題の核心はこれ。つまり、各Servletのインスタンスは１つしか作られず、
+* 新規init()後に Tomcatのコンテナ上に Servletインスタンスをプールする。
+* 複数ユーザーからの requestでも、新規にインスタンスを作ることなく、
+* プールしてある Servletインスタンスを用いる仕組み。
+*
+* この仕組みによって、[Java]における不変オブジェクトのようになり、
+* init()後の変更は反映されなくなるのが原因と思われる。
+* ただし不変オブジェクトでもListなどの参照系は要素の中身は変更可能。
+*
+* volatileはJVMの機能、問題の根本は Tomcatのインスタンスプールなので、
+* volatileでは解決しない。
+* 同様の理由で、[JavaScript]の location.reload()
+* ブラウザからのリロードrequestでも、Servletプールからリロードしてくるので、
+* 問題は解決しないだろう。
+*
+* 【結論】
+* フィールドを共有する必要があるなら、同一Servlet内に記述すべし。
+* doGet(), doPost()と異なる処理なら、
+* requestパラメタや別メソッドなどで分岐させる。
+* => locale変更のフィールド問題、解決しました。
+*
+*/
+◆ChangeLanguageServletを無効化による修正点
+＊この記述を name="order"に変更。superで取得し parseで解析。
+<button name="language" value="<fmt:message key="language" bundle="${bundle}" />"
+  formaction="ChangeLanguageServlet" formmethod="POST">
+    <fmt:message key="language" bundle="${bundle}" />
+</button>
+
+＊parse.buildLocale()を Servlet配下にコピー
+＊super.setLocale()は unUsedながら、ChangeLanguageServletにそのまま保存。
