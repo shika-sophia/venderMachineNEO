@@ -38,17 +38,17 @@ public class VenderParse {
         }
     }//parseOrder()
 
-    public Locale buildLocale(String language) {
+    //unUsed ChangeLanguageServlet用
+    public Locale buildLocale(String order) {
         String parsedLanguage = "";
-        if(language.equals("日本語")) {
+        if(order.equals("日本語")) {
             parsedLanguage = "ja";
-        } else if(language.equals("English")){
+        } else if(order.equals("English")){
             parsedLanguage = "en";
         }
 
         return new Locale(parsedLanguage);
     }//buildLocale()
-
 //    //====== Test main() ======
 //    public static void main(String[] args) {
 //        var data = new DrinkData();

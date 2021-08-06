@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class DrinkData {
-    private Locale locale;
     private double EX_RATE;
 
     //---- define drinkList as Locale ja ----
@@ -68,24 +67,23 @@ public class DrinkData {
     }
 
     //====== for MainVenderBundleServlet ======
-    public List<String> getPriceListStr(Locale locale, double EX_RATE) {
-        return listIntToStr(priceList, priceListStr, locale, EX_RATE);
+    public List<String> getPriceListStr(Locale locale, boolean localeChanged, double EX_RATE) {
+        return listIntToStr(priceList, priceListStr, locale, localeChanged, EX_RATE);
     }//getPriceListStr()
 
-    public List<String> getSelectListStr(Locale locale, double EX_RATE) {
-        return listIntToStr(selectList, selectListStr, locale, EX_RATE);
+    public List<String> getSelectListStr(Locale locale, boolean localeChanged, double EX_RATE) {
+        return listIntToStr(selectList, selectListStr, locale, localeChanged, EX_RATE);
     }
 
     //====== List<Integer>を Localeによって分岐した List<String>に変換 ======
     private List<String> listIntToStr(
             List<Integer> listInt, List<String> listStr,
-            Locale locale, double EX_RATE){
+            Locale locale, boolean localeChanged, double EX_RATE){
 
         //listStrが未作成か Locale,為替レートに変更があれば listStrを作成
         if(listStr.isEmpty()
-                || this.locale != locale
+                || localeChanged
                 || this.EX_RATE != EX_RATE) {
-            this.locale = locale;
             this.EX_RATE = EX_RATE;
             listStr.clear(); //空でなく変更によって作り直す場合にクリア
 
