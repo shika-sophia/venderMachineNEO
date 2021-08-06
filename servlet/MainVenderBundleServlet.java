@@ -6,6 +6,7 @@
  *          Bundle対応で jsp内の分岐を最小限にし、Localeで表示切替を可能にした。
  *          その分、DrinkDataに Locale分岐を記述。
  * @see reference / venderMachine_RDD要件定義.txt
+ * @see reference / venderAnalysis.txt
  *
  * @package ---- servlet ----
  * @class EncodingFilter / jsp,Servletを「UTF-8」でencodeing
@@ -19,12 +20,14 @@
  *          #Locale locale
  *          #HttpSession session
  *          #double EX_RATE 為替レート 1$=100円
- *          -boolean init /
+ *          -boolean init
+ *          -boolean localeChanged /
  *        +init() フィールド初期化
  *        #doGet()  jspの表示に必要な値の取得し、 forward
  *        #doPost() jspから order取得、orderを解析しロジックに渡す
  *        #setSession(HttpServletRequest)
  *        #setLocale(Locale)
+ *        -buildLocale(String order)
  * @class ChangeLanguageServlet extends MainVenderServlet
  *
  * @package ---- model ----
@@ -81,8 +84,10 @@
  * @see reference/venderView_button.jpg
  * @see reference/venderView_returnMoney.jpg
  * @see reference/venderView_localeEn.jpg
+ * @see reference/venderViewBundle_localeChanged.jpg
+ * @see reference/venderViewBundle_localeChangedEn.jpg
  * @author shika
- * @date 2021-07-25 ～ 08-04
+ * @date 2021-07-25 ～ 08-06
  */
 
 package servlet;
@@ -116,7 +121,8 @@ public class MainVenderBundleServlet extends HttpServlet {
     protected HttpSession session;
     protected Locale locale;
     protected final double EX_RATE = 100d;//為替レート 1$=100円
-    private boolean init = true;  //doGet()の初回か
+    private boolean init = true;          //doGet()の初回か
+    private boolean localeChanged = false;
 
     public void init(ServletConfig config)
             throws ServletException {
@@ -139,6 +145,8 @@ public class MainVenderBundleServlet extends HttpServlet {
             //this.locale = request.getLocale();
             //calc.setDrinkLocale(data, locale);
             setSession(request);
+
+            this.localeChanged = false;
             this.init = false;
         }
         setRequestScope(request);
@@ -149,8 +157,8 @@ public class MainVenderBundleServlet extends HttpServlet {
     protected void setSession(HttpServletRequest request) {
         this.session = request.getSession();
         List<String> drinkList = data.getDrinkList(locale);
-        List<String> priceListStr = data.getPriceListStr(locale, EX_RATE);
-        List<String> selectListStr = data.getSelectListStr(locale, EX_RATE);
+        List<String> priceListStr = data.getPriceListStr(locale, localeChanged, EX_RATE);
+        List<String> selectListStr = data.getSelectListStr(locale,localeChanged, EX_RATE);
         session.setAttribute("locale", locale.toString());
         session.setAttribute("EX_RATE", EX_RATE);
         session.setAttribute("drinkList", drinkList);
@@ -173,15 +181,36 @@ public class MainVenderBundleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String order = (String) request.getParameter("order");
+
+        if(order.equals("日本語") || order.equals("English")) {
+            buildLocale(order);
+            calc.restractDidList(data, locale);
+            mess.restractLocale(locale);
+
+            this.localeChanged = true;
+            this.init = true;
+        }
+
         parse.parseOrder(order, calc);
         mess.buildMsg(order, locale, calc);
 
         doGet(request, response);
     }//doPost()
 
+    private void buildLocale(String order) {
+        String parsedLanguage = "";
+        if(order.equals("日本語")) {
+            parsedLanguage = "ja";
+        } else if(order.equals("English")){
+            parsedLanguage = "en";
+        }
+
+        this.locale = new Locale(parsedLanguage);
+    }//buildLocale()
+
+    //unUsed ChangeLanguageServlet用
     protected void setLocale(Locale locale) {
         this.locale = locale;
     }
-
 }//class
 
