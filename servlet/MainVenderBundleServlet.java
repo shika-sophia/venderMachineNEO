@@ -28,7 +28,8 @@
  *        #setSession(HttpServletRequest)
  *        #setLocale(Locale)
  *        -buildLocale(String order)
- * @class ChangeLanguageServlet extends MainVenderServlet
+ * @class ChangeLanguageServlet extends MainVenderbundleServlet 〔unUsed〕
+ * @class EditerServlet extends MainVenderBundleServlet //ドリンクの追加・削除機能
  *
  * @package ---- model ----
  * @class DrinkData / ドリンクデータの定義
