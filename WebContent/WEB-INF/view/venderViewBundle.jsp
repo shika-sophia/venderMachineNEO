@@ -100,6 +100,9 @@
     <button name="order" value="<fmt:message key='language' bundle='${bundle}' />">
         <fmt:message key="language" bundle="${bundle}" />
     </button>
+    <button formaction="EditorServlet" formmethod="GET">
+      <fmt:message key="edit" bundle="${bundle}" />
+    </button>
     <input type="hidden" name="order" value="input0">
 </form>
 </body>

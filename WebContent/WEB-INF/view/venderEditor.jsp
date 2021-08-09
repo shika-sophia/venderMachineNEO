@@ -16,28 +16,80 @@
 <form>
   <!-- DrinkEditorTable -->
   <table border="1">
-  <tr> <!-- drink section -->
-    <c:forEach var="drink" items="${sessionScope['drinkList']}" varStatus="list">
+  <tr> <!-- index section -->
+    <td>
+      <fmt:message key="index" bundle="${bundle}" />:
+    </td>
+    <c:forEach varStatus="list" items="${sessionScope['drinkList']}">
       <td>
-        <input type="text" name="drinkList" value="drink${list.index}"
-          placeholder="${drink}" />
+        <input type="text" name="indexList" placeholder="${list.index * 10}" />
       </td>
     </c:forEach>
-  </tr>
-  <tr> <!-- price section -->
-    <c:forEach var="price" items="${sessionScope['priceListStr']}" varStatus="list">
       <td>
-        <input type="text" name="priceList" value="price${list.index}"
-          placeholder="
-            <fmt:message key='currency' bundle='bundle'>
+        <input type="text" name="appendList" size="5" />
+      </td>
+  </tr>
+
+  <tr> <!-- drinkName section -->
+    <td>
+      <fmt:message key="name" bundle="${bundle}" />:
+    </td>
+    <c:forEach var="drink" items="${sessionScope['drinkList']}">
+      <td>
+        <input type="text" name="drinkList" placeholder="${drink}" />
+      </td>
+    </c:forEach>
+      <td>
+        <input type="text" name="appendList" size="5" />
+      </td>
+  </tr>
+
+  <tr> <!-- EnglishName section -->
+    <td>
+      <fmt:message key="nameEn" bundle="${bundle}" />:
+    </td>
+    <c:forEach varStatus="list" items="${sessionScope['drinkList']}">
+      <td>  </td>
+    </c:forEach>
+    <td>
+        <input type="text" name="appendList" size="5" />
+    </td>
+  </tr>
+
+  <tr> <!-- price section -->
+    <td>
+      <fmt:message key="price" bundle="${bundle}" />:
+    </td>
+    <c:forEach var="price" items="${sessionScope['priceListStr']}">
+      <td>
+        <input type="text" name="priceList" placeholder="
+            <fmt:message key='currency' bundle='${bundle}'>
               <fmt:param value='${price}' />
             </fmt:message>
           " />
       </td>
     </c:forEach>
+    <td>
+        <input type="text" name="appendList" size="5" />
+    </td>
   </tr>
-  <tr> <!-- button section -->
 
+  <tr> <!-- button section -->
+    <td>
+      <fmt:message key="delete" bundle="${bundle}" />:
+    </td>
+    <c:forEach varStatus="list" items="${sessionScope['drinkList']}" >
+      <td>
+        <button name="delete" value="delete${list.index}">
+          <fmt:message key="delete" bundle="${bundle}" />
+        </button>
+      </td>
+    </c:forEach>
+      <td>
+        <button name="append">
+          <fmt:message key="append" bundle="${bundle}" />
+        </button>
+      </td>
   </tr>
   </table>
 </form>
