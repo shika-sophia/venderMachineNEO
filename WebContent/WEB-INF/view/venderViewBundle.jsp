@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="locale" value="${sessionScope['locale']}" />
 <c:set var="EX_RATE" value="${sessionScope['EX_RATE']}" />
-<c:set var="priceList" value="${requestScope['priceList']}" />
 <c:set var="current" value="${requestScope['current']}" />
   <c:if test="${locale != 'ja' && locale != 'ja_JP'}">
     <c:set var="current" value="${current / EX_RATE}" />
