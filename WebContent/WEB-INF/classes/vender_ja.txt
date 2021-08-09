@@ -3,6 +3,14 @@ out=コイン返金
 currency={0}円
 list=購入リスト:
 language=English
+edit=編集
+index=順番
+name=ドリンク名
+nameEn=English Name
+price=価格
+delete=削除
+append=追加
+
 
 #>cd C:\Program Files\pleiades\workspace-web\venderMachineNEO\WebContent\WEB-INF\classes
 #>native2ascii -encoding UTF-8 vender_ja.txt vender_ja.properties
