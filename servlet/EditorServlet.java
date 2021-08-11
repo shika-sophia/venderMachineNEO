@@ -17,8 +17,9 @@
  *   &dr=&dr=&dr=&dr=&dr=Milk&ap=Soda&ap=SodaEn
  *   &pr=&pr=&pr=&pr=&pr=&ap=1.20&de=de3
  *
+ * @see reference/venderEdit_En.jpg
  * @author shika
- * @date 2021-08-10
+ * @date 2021-08-11
  */
 
 package servlet;
@@ -55,7 +56,6 @@ public class EditorServlet extends MainVenderBundleServlet {
                 appendEditAry, deleteEditAry);
 
         EditLogic editLogic = new EditLogic(editData);
-        editLogic.editParse();
         super.doGet(request, response);
     }//doPost()
 
