@@ -102,7 +102,7 @@
       </td>
     </c:forEach>
       <td>
-        <button>
+        <button name="de" value="append">
           <fmt:message key="append" bundle="${bundle}" />
         </button>
       </td>
