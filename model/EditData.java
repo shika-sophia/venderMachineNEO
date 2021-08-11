@@ -29,7 +29,7 @@ public class EditData extends DrinkData {
 //            indexEditList, drinkEditList, priceEditList,
 //            appendEditList, deleteEditList));
 //        printNestList(editList);
-    }
+    }//constructor
 
     private List<String> aryToList(String[] ary) {
         return new ArrayList<>(Arrays.asList(ary));
@@ -38,7 +38,8 @@ public class EditData extends DrinkData {
 //    private void printNestList(List<List<String>> nestList) {
 //        nestList.stream()
 //            .flatMap(list -> {
-//                list.add(list.size() - 1, "\n");
+//                System.out.println(list.size());
+//                list.add(list.size(), "\n");
 //                return list.stream();
 //            })
 //            .forEach(System.out::print);
@@ -47,8 +48,15 @@ public class EditData extends DrinkData {
 
 /*
 // ---- Test printNestList() ----
-Soda       //drink
-50みるくMilk //append
-1.20       //append
-de2        //delete
+5 //index
+
+5 //drink
+Soda
+5 //price
+
+4 //append
+50みるくMilk1.20
+1 //delete
+de2
+
 */
