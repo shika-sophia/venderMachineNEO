@@ -40,7 +40,7 @@
     </td>
     <c:forEach varStatus="list" items="${sessionScope['drinkList']}">
       <td>
-        <input type="text" name="id" placeholder="${list.index * 10}" />
+        <input type="text" name="id" value="${list.index * 10}" />
       </td>
     </c:forEach>
       <td>
