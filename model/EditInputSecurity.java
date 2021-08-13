@@ -26,11 +26,11 @@ public class EditInputSecurity {
     }
 
     public boolean checkListElement() {
-        boolean canAccept = editList.parallelStream()
+        boolean isMatch = editList.parallelStream()
             .flatMap(list -> list.parallelStream())
             .anyMatch(this::normalizedMatch);
 
-        return !(canAccept); //anyMatchしていたら false
+        return !(isMatch); //anyMatchしていたら false -> canAccept
     }//checkListElement()
 
     private boolean normalizedMatch(String element) {
