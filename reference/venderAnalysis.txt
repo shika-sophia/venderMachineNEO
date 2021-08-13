@@ -148,3 +148,24 @@ Localeを切り替えても、100円 -> $100になるので、
 
 ＊parse.buildLocale()を Servlet配下にコピー
 ＊super.setLocale()は unUsedながら、ChangeLanguageServletにそのまま保存。
+
+/*
+ * @status 未使用クラス
+ * @descrition
+ * //====== model/EditorLogic | 2021-08-13 ======
+ * ◆<input placeholder="">で入力フォームを作成。
+ * Servletで String[]の値を取得
+ * String[] -> List<String>に変換。
+ *
+ * 値の変更があった部分だけを処理するアルゴリズム。
+ * 値の変更がなかった部分は ""blankの要素が入っている。
+ *
+ * ◆<input value="">で入力フォームを作成。
+ * アルゴリズムを変更し、すべての値を入れておき、
+ * 変更部分だけ修正された値となる。
+ * ""blank判定は不要になり、そのまま変更後のListを作成できる。
+ * 確認ページ confirmに渡すなら、こちらのアルゴリズムのほうが処理がシンプル。
+ *
+ * EditLogicは 不要なので、システムから除外。保存だけしておく。
+ * EditBlankLogicに改名。
+ */
