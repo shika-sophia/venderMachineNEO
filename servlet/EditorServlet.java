@@ -12,11 +12,6 @@
  * @param ap -> appendEditList
  * @param de -> deleteEditList
  *
- * @requestQuery http://localhost:8080/venderMachineNEO/EditorServlet
- *   ?id=&id=&id=&id=&id=&ap=50
- *   &dr=&dr=&dr=&dr=&dr=Milk&ap=Soda&ap=SodaEn
- *   &pr=&pr=&pr=&pr=&pr=&ap=1.20&de=de3
- *
  * @see reference/venderEdit_En.jpg
  * @author shika
  * @date 2021-08-11
@@ -27,17 +22,26 @@ package servlet;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.EditData;
-import model.EditLogic;
+import model.EditInputSecurity;
 
 @WebServlet("/EditorServlet")
 public class EditorServlet extends MainVenderBundleServlet {
     private static final long serialVersionUID = 1L;
+    private EditData editData;
+    private EditInputSecurity security;
+
+    public void init(ServletConfig config)
+            throws ServletException {
+        editData = new EditData();
+        security = new EditInputSecurity(editData);
+    }//init()
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = "/WEB-INF/view/venderEditor.jsp";
@@ -51,12 +55,16 @@ public class EditorServlet extends MainVenderBundleServlet {
         String[] priceEditAry = request.getParameterValues("pr");
         String[] appendEditAry = request.getParameterValues("ap");
         String[] deleteEditAry = request.getParameterValues("de");
-        EditData editData = new EditData(
-                indexEditAry, drinkEditAry, priceEditAry,
-                appendEditAry, deleteEditAry);
+        editData.setListValue(
+            indexEditAry, drinkEditAry, priceEditAry,
+            appendEditAry, deleteEditAry);
 
-        EditLogic editLogic = new EditLogic(editData);
-        super.doGet(request, response);
+        security.setEditList();
+        boolean canAccept = security.checkListElement();
+
+        String path = "/WEB-INF/veiw/editConfirm.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        dis.forward(request, response);
     }//doPost()
 
 }//class
