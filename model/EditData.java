@@ -20,22 +20,36 @@ public class EditData extends DrinkData {
             String[] priceEditAry,
             String[] appendEditAry,
             String[] deleteEditAry) {
-        this.indexEditList = aryToList(indexEditAry);
-        this.drinkEditList = aryToList(drinkEditAry);
-        this.priceEditList = aryToList(priceEditAry);
-        this.appendEditList = aryToList(appendEditAry);
-        this.deleteEditList = aryToList(deleteEditAry);
+        this.indexEditList = aryToList(indexEditAry, indexEditList);
+        this.drinkEditList = aryToList(drinkEditAry, drinkEditList);
+        this.priceEditList = aryToList(priceEditAry, priceEditList);
+        this.appendEditList = aryToList(appendEditAry, appendEditList);
+        this.deleteEditList = aryToList(deleteEditAry, deleteEditList);
+        buildEditList();
 
         //---- Test print ----
-        editList = new ArrayList<>(Arrays.asList(
-            indexEditList, drinkEditList, priceEditList,
-            appendEditList, deleteEditList));
         printNestList(editList);
     }//setListValue()
 
-    private List<String> aryToList(String[] ary) {
-        return new ArrayList<>(Arrays.asList(ary));
-    }
+    private void buildEditList() {
+        if(editList == null) {
+            editList = new ArrayList<>(Arrays.asList(
+                indexEditList, drinkEditList, priceEditList,
+                appendEditList, deleteEditList));
+        }
+    }//buildEditList()
+
+    private List<String> aryToList(String[] ary, List<String> list) {
+        if(list == null) {
+            list = new ArrayList<>(Arrays.asList(ary));
+        } else {
+            list.clear();
+            Arrays.stream(ary)
+                .forEach(list::add);
+        }
+
+        return list;
+    }//aryToList()
 
     //====== Test print ======
     private void printNestList(List<List<String>> nestList) {
