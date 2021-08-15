@@ -45,7 +45,7 @@ public class EditorServlet extends MainVenderBundleServlet {
             throws ServletException {
         editData = new EditData();
         security = new EditInputSecurity(editData);
-        editTemp = new EditTempLogic(editData);
+        editTemp = new EditTempLogic(editData, locale);
         editMess = new EditMessage(locale);
     }//init()
 
