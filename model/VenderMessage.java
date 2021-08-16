@@ -64,6 +64,35 @@ public class VenderMessage {
         }
     }//restractLocale()
 
+    //====== from AuthServlet ======
+    public String authMsg(Locale locale) {
+        String authMsg = "";
+        if(locale.toString().contains("ja")) {
+            authMsg = "編集機能の認証をしてください。";
+        } else {
+            authMsg = "Please input Name and Pass, <br />" +
+                      "if you want to use 'Editable Page'.";
+        }
+
+        return authMsg;
+    }//authMsg()
+
+    public void authEditable(Locale locale) {
+        if(locale.toString().contains("ja")) {
+            msg = "認証完了です。";
+        } else {
+            msg = "Your authentication was succeeded.";
+        }
+    }//authEditable()
+
+    public void authFailed(Locale locale) {
+        if(locale.toString().contains("ja")) {
+            msg = "認証できませんでした。";
+        } else {
+            msg = "Your authentication was failed.";
+        }
+    }//authFailed()
+
 //    //====== Test main() ====
 //    public static void main(String[] args) {
 //        var data = new DrinkData();
