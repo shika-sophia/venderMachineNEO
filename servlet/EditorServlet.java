@@ -63,6 +63,7 @@ public class EditorServlet extends MainVenderBundleServlet {
         editData.setListValue(
             indexEditAry, drinkEditAry, priceEditAry,
             appendEditAry, deleteEditAry);
+        editTemp.setValue();
 
         //入力チェック(スクリプトタグ)
         security.setEditList();
@@ -95,3 +96,22 @@ public class EditorServlet extends MainVenderBundleServlet {
     }//doForward()
 
 }//class
+
+/*
+【問題発生】 なぜか localeの値が継承されていない。
+editMess = new EditMessage(locale);
+System.out.println("locale: " + locale); //locale: null
+
+locale = super.locale;と明示的に代入してみたが、結果は同様
+
+AuthServletを処理遷移の間に挿入する前は ちゃんと機能していた。
+継承関係は以下のように並列
+*MainServlet <-- AuthServlet
+*             ┗ EditorServlet
+* 試しに Main <- Auth <- Editor のように直列にしてみたが
+* 結果は同様。
+*
+* AuthServletのほうには継承されている
+* String authMsg = mess.authMsg(locale);
+* request.setAttribute("msg", authMsg);
+*/

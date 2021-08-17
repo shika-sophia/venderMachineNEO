@@ -25,7 +25,7 @@ public class AuthServlet extends MainVenderBundleServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String authMsg = mess.authMsg(locale);
-        request.setAttribute("authMsg", authMsg);
+        request.setAttribute("msg", authMsg);
 
         String path = "/WEB-INF/view/venderAuth.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -35,21 +35,21 @@ public class AuthServlet extends MainVenderBundleServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userInput = (String) request.getParameter("user");
         String passInput = (String) request.getParameter("pass");
+        String order = (String) request.getParameter("order");
 
         boolean canAuth = judgeAuth(userInput, passInput);
         String path = "";
-        if(canAuth) {
+        if(canAuth && !order.equals("input0")) {
             mess.authEditable(locale);
             path = "EditorServlet";
-            //【NullPo発生中】
-            //EditorServlet.init()は EditDataが存在することを前提に初期化しているので
-            //ここで呼び出すと init()が起動して、 EditListが未記入のまま nullとなる。
 
         } else {
             mess.authFailed(locale);
             path = "MainVenderBundleServlet";
         }
 
+        String msg = mess.getMsg(locale);
+        request.setAttribute("msg", msg);
         response.sendRedirect(path);
     }//doPost()
 
