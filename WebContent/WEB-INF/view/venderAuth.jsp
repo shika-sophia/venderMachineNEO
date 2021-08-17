@@ -29,7 +29,8 @@
     <tr>
       <td>
         <input type="submit" value="Submit" />
-        <button formaction="MainVenderBundleServlet" formmethod="GET">Return</button>
+        <input type="hidden" name = "order" value="return" />
+        <button formaction="MainVenderBundleServlet" formmethod="POST">Return</button>
       </td>
     </tr>
   </table>
