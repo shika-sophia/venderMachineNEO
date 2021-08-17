@@ -168,4 +168,19 @@ Localeを切り替えても、100円 -> $100になるので、
  *
  * EditLogicは 不要なので、システムから除外。保存だけしておく。
  * EditBlankLogicに改名。
- */
+ *
+ //====== EditorServlet / 2021-08-17 ======
+ /*
+【問題発生】 なぜか localeの値が継承されていない。
+editMess = new EditMessage(locale);
+System.out.println("locale: " + locale); //locale: null
+
+locale = super.locale;と明示的に代入してみたが、結果は同様
+
+AuthServletを処理遷移の間に挿入する前は ちゃんと機能していた。
+継承関係は以下のように並列
+*MainServlet <-- AuthServlet
+*             ┗ EditorServlet
+* 試しに Main <- Auth <- Editor のように直列にしてみたが
+* 結果は同様。
+*/
