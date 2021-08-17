@@ -15,9 +15,12 @@ public class EditTempLogic {
     public EditTempLogic(EditData editData, Locale locale) {
         this.editData = editData;
         this.locale = locale;
+    }
+
+    public void setValue() {
         this.baseSize = editData.drinkEditList.size();
         this.defaultIndexList = buildDefaultIndex();
-    }
+    }//setValue()
 
     private List<String> buildDefaultIndex() {
         if (defaultIndexList == null) {
