@@ -122,8 +122,8 @@ public class MainVenderBundleServlet extends HttpServlet {
     protected HttpSession session;
     protected Locale locale;
     protected final double EX_RATE = 100d;//為替レート 1$=100円
-    private boolean init = true;          //doGet()の初回か
-    private boolean localeChanged = false;
+    protected boolean first = true;          //doGet()の初回か
+    protected boolean localeChanged = false;
 
     public void init(ServletConfig config)
             throws ServletException {
@@ -142,13 +142,13 @@ public class MainVenderBundleServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(init) { //doGet()初回のみ
+        if(first) { //doGet()初回のみ
             //this.locale = request.getLocale();
             //calc.setDrinkLocale(data, locale);
             setSession(request);
 
             this.localeChanged = false;
-            this.init = false;
+            this.first = false;
         }
         setRequestScope(request);
 
@@ -189,7 +189,7 @@ public class MainVenderBundleServlet extends HttpServlet {
             mess.restractLocale(locale);
 
             this.localeChanged = true;
-            this.init = true;
+            this.first = true;
         }
 
         parse.parseOrder(order, calc);

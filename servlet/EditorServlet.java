@@ -43,6 +43,7 @@ public class EditorServlet extends MainVenderBundleServlet {
 
     public void init(ServletConfig config)
             throws ServletException {
+        super.init(config);
         editData = new EditData();
         security = new EditInputSecurity(editData);
         editTemp = new EditTempLogic(editData, locale);
@@ -98,7 +99,7 @@ public class EditorServlet extends MainVenderBundleServlet {
 }//class
 
 /*
-【問題発生】 なぜか localeの値が継承されていない。
+【NullPo問題】 なぜか localeの値が継承されていない。
 editMess = new EditMessage(locale);
 System.out.println("locale: " + locale); //locale: null
 
@@ -114,4 +115,12 @@ AuthServletを処理遷移の間に挿入する前は ちゃんと機能して�
 * AuthServletのほうには継承されている
 * String authMsg = mess.authMsg(locale);
 * request.setAttribute("msg", authMsg);
+*
+* 【解決】
+* AuthServletには init()がない。
+* EditorServletには init()を Overrideしたが、
+* super.init(config);を記述していなかったので、
+* EditorServletのインスタンス時に、superのインスタンスも行われるが
+* superのinit()が呼び出されておらず、locale値が nullになったままになっていた。
+* super.init(config)を補ったら解決す。
 */
