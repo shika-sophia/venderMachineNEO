@@ -171,7 +171,7 @@ Localeを切り替えても、100円 -> $100になるので、
  *
  //====== EditorServlet / 2021-08-17 ======
  /*
-【問題発生】 なぜか localeの値が継承されていない。
+【NullPo問題】 なぜか localeの値が継承されていない。
 editMess = new EditMessage(locale);
 System.out.println("locale: " + locale); //locale: null
 
@@ -183,4 +183,61 @@ AuthServletを処理遷移の間に挿入する前は ちゃんと機能して�
 *             ┗ EditorServlet
 * 試しに Main <- Auth <- Editor のように直列にしてみたが
 * 結果は同様。
+*
+* AuthServletのほうには継承されている
+* String authMsg = mess.authMsg(locale);
+* request.setAttribute("msg", authMsg);
+*
+* 【解決】
+* AuthServletには init()がない。
+* EditorServletには init()を Overrideしたが、
+* super.init(config);を記述していなかったので、
+* EditorServletのインスタンス時に、superのインスタンスも行われるが
+* superのinit()が呼び出されておらず、locale値が nullになったままになっていた。
+* super.init(config)を補ったら解決す。
+*/
+//====== ChangeLanguageServlet(再論) / 2021-08-18 ======
+このServletを利用時に不具合のあった requestScopeが機能しない問題。
+venderAuthからの[戻る]ボタンでは current,msgも ちゃんと表示されたので
+    request.setAttribute()をここですればいいのかも
+    super.doGet()で処理遷移するのではなく、sendRedirect()かも。
+MainVenderBundleServlet.doPost()に記述した下記のコードを
+バックアップし、再度このServletで機能できるか挑戦してみる。
+
+
+msgと購入リストが enのままだが、やっぱり、localeの変更ができていない。
+drinkList, priceList, selectList, button は日本語に変換、
+ここは localeが変更されている。なんじゃりゃ。
+
+//====== MainVenderBundleServlet.doPost() / 2021-08-18 ======
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    String order = (String) request.getParameter("order");
+
+    if(order.equals("日本語") || order.equals("English")) {
+        buildLocale(order);
+        calc.restractDidList(data, locale);
+        mess.restractLocale(locale);
+
+        this.localeChanged = true;
+        this.first = true;
+    }
+
+    parse.parseOrder(order, calc);
+    mess.buildMsg(order, locale, calc);
+
+    doGet(request, response);
+}//doPost()
+
+private void buildLocale(String order) {
+    String parsedLanguage = "";
+    if(order.equals("日本語")) {
+        parsedLanguage = "ja";
+    } else if(order.equals("English")){
+        parsedLanguage = "en";
+    }
+
+    this.locale = new Locale(parsedLanguage);
+}//buildLocale()
+
 */
