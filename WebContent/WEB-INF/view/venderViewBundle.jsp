@@ -97,7 +97,8 @@
       </tr>
     </table>
 <br />
-    <button name="order" value="<fmt:message key='language' bundle='${bundle}' />">
+    <button name="order" value="<fmt:message key='language' bundle='${bundle}' />"
+      formaction="ChangeLanguageServlet" formmethod="POST">
         <fmt:message key="language" bundle="${bundle}" />
     </button>
     <button formaction="AuthServlet" formmethod="GET">
