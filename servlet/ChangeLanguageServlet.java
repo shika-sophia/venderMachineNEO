@@ -8,12 +8,11 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 //import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/ChangeLanguageServlet")
+//@WebServlet("/ChangeLanguageServlet")
 public class ChangeLanguageServlet extends MainVenderBundleServlet {
     private static final long serialVersionUID = 1L;
 
@@ -23,13 +22,14 @@ public class ChangeLanguageServlet extends MainVenderBundleServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String order = (String) request.getParameter("order");
 
+        Locale locale = null;
         if(order.equals("日本語") || order.equals("English")) {
-            buildLocale(order);
+            locale = buildLocale(order);
             calc.restractDidList(data, locale);
             mess.restractLocale(locale);
 
-            localeChanged = true;
-            first = true;
+            //localeChanged = true;
+            //first = true;
         }
 
         parse.parseOrder(order, calc);
@@ -38,7 +38,7 @@ public class ChangeLanguageServlet extends MainVenderBundleServlet {
         super.doGet(request, response);
     }//doPost()
 
-    private void buildLocale(String order) {
+    private Locale buildLocale(String order) {
         String parsedLanguage = "";
         if(order.equals("日本語")) {
             parsedLanguage = "ja";
@@ -47,6 +47,8 @@ public class ChangeLanguageServlet extends MainVenderBundleServlet {
         }
 
         this.locale = new Locale(parsedLanguage);
+        super.setLocale(locale);
+        return locale;
     }//buildLocale()
 
 }//class
@@ -95,5 +97,30 @@ private void buildLocale(String order) {
 
     this.locale = new Locale(parsedLanguage);
 }//buildLocale()
+
+◆Redirect
+String path = "MainVenderBundleServlet";
+response.sendRedirect(path);
+これだと、全く日本語表示にならず、localeの初期状態で表示。
+ここでの処理は ChangeServletが持つ superに反映していて、
+リダイレクトで MainServletに行ったものは、
+別のrequestであるし、別のインスタンスなのでは？
+current, didBuyListは正しく表示。
+
+◆super.doGet(request, response);
+sessionScopeのlocaleは変更されているが、
+requestScopeの current,canBuyList,didBuyListの localeは元のまま
+ただし、同じくrequestScopeの msgは「日本語に変更しました。」と正しく表示。
+
+【問題】一度 locale en -> jaにすると、再度 ja -> enに戻らない問題。
+MainServletのみでは、ちゃんとできていたのだが、ChangeServletはこれができていない。
+
+やはり、NoUsedに戻すか・・
+ちなみに このServletを利用しない場合は
+//@WebServlet("/ChangeLanguageServlet")
+アノテーションをコメントアウトすると Tomcatコンテナにdeployされなくなる。
+venderViewBundle.jsp
+    formaction="ChangeLanguageServlet" formmethod="POST"
+これも削除しておく。
 
 */
