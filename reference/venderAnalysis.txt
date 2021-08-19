@@ -240,4 +240,29 @@ private void buildLocale(String order) {
     this.locale = new Locale(parsedLanguage);
 }//buildLocale()
 
+◆Redirect
+String path = "MainVenderBundleServlet";
+response.sendRedirect(path);
+これだと、全く日本語表示にならず、localeの初期状態で表示。
+ここでの処理は ChangeServletが持つ superに反映していて、
+リダイレクトで MainServletに行ったものは、
+別のrequestであるし、別のインスタンスなのでは？
+current, didBuyListは正しく表示。
+
+◆super.doGet(request, response);
+sessionScopeのlocaleは変更されているが、
+requestScopeの current,canBuyList,didBuyListの localeは元のまま
+ただし、同じくrequestScopeの msgは「日本語に変更しました。」と正しく表示。
+
+【問題】一度 locale en -> jaにすると、再度 ja -> enに戻らない問題。
+MainServletのみでは、ちゃんとできていたのだが、ChangeServletはこれができていない。
+
+やはり、NoUsedに戻すか・・
+ちなみに このServletを利用しない場合は
+//@WebServlet("/ChangeLanguageServlet")
+アノテーションをコメントアウトすると Tomcatコンテナにdeployされなくなる。
+venderViewBundle.jsp
+    formaction="ChangeLanguageServlet" formmethod="POST"
+これも削除しておく。
+
 */
