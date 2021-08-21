@@ -122,8 +122,8 @@ public class MainVenderBundleServlet extends HttpServlet {
     protected HttpSession session;
     protected Locale locale;
     protected final double EX_RATE = 100d;//為替レート 1$=100円
-    protected boolean first = true;          //doGet()の初回か
-    protected boolean localeChanged = false;
+    private boolean first = true;          //doGet()の初回か
+    private boolean localeChanged = false;
 
     public void init(ServletConfig config)
             throws ServletException {

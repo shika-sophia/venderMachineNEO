@@ -20,6 +20,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -27,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.EditData;
 import model.EditInputSecurity;
@@ -40,6 +43,7 @@ public class EditorServlet extends MainVenderBundleServlet {
     protected EditInputSecurity security;
     protected EditTempLogic editTemp;
     protected EditMessage editMess;
+    private boolean editFirst;
 
     public void init(ServletConfig config)
             throws ServletException {
@@ -48,22 +52,39 @@ public class EditorServlet extends MainVenderBundleServlet {
         security = new EditInputSecurity(editData);
         editTemp = new EditTempLogic(editData, locale);
         editMess = new EditMessage(locale);
+        this.editFirst = true;
     }//init()
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if(editFirst) {
+            List<String> drinkListJp = data.getDrinkList(new Locale("ja"));
+            List<String> drinkListEn = data.getDrinkList(new Locale("en"));
+            session.setAttribute("drinkListJp", drinkListJp);
+            session.setAttribute("drinkListEn", drinkListEn);
+            editFirst = false;
+
+        } else {
+            List<String> drinkListJp = editData.getDrinkJpEditList();
+            List<String> drinkListEn = editData.getDrinkEnEditList();
+            session.setAttribute("drinkListJp", drinkListJp);
+            session.setAttribute("drinkListEn", drinkListEn);
+        }
+
         String path = "/WEB-INF/view/venderEditor.jsp";
         doForward(request, response, path);
     }//doGet()
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] indexEditAry = request.getParameterValues("id");
-        String[] drinkEditAry = request.getParameterValues("dr");
+        String[] drinkJpEditAry = request.getParameterValues("drJp");
+        String[] drinkEnEditAry = request.getParameterValues("drEn");
         String[] priceEditAry = request.getParameterValues("pr");
         String[] appendEditAry = request.getParameterValues("ap");
         String[] deleteEditAry = request.getParameterValues("de");
         editData.setListValue(
-            indexEditAry, drinkEditAry, priceEditAry,
-            appendEditAry, deleteEditAry);
+            indexEditAry, drinkJpEditAry, drinkJpEditAry,
+            priceEditAry, appendEditAry, deleteEditAry);
         editTemp.setValue();
 
         //入力チェック(スクリプトタグ)
