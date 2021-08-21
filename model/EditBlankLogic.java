@@ -40,7 +40,7 @@ public class EditBlankLogic {
     private void parseEditOrder() {
         //すべての要素が「""」blankなら false
         boolean indexOrder = isOrder(editData.indexEditList);
-        boolean drinkOrder = isOrder(editData.drinkEditList);
+        boolean drinkOrder = isOrder(editData.drinkJpEditList);
         boolean priceOrder = isOrder(editData.priceEditList);
         boolean appendOrder = isOrder(editData.appendEditList);
         boolean deleteOrder = isOrder(editData.deleteEditList);

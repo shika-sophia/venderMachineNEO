@@ -18,7 +18,7 @@ public class EditTempLogic {
     }
 
     public void setValue() {
-        this.baseSize = editData.drinkEditList.size();
+        this.baseSize = editData.drinkJpEditList.size();
         this.defaultIndexList = buildDefaultIndex();
     }//setValue()
 
@@ -27,7 +27,7 @@ public class EditTempLogic {
             defaultIndexList = new ArrayList<String>();
         }
 
-        this.baseSize = editData.drinkEditList.size();
+        this.baseSize = editData.drinkJpEditList.size();
         defaultIndexList.clear();
         IntStream.rangeClosed(0, baseSize)
             .mapToObj(i -> String.valueOf(i * 10))

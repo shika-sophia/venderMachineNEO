@@ -7,7 +7,8 @@ import java.util.List;
 public class EditData extends DrinkData {
     List<List<String>> editList;
     List<String> indexEditList;
-    List<String> drinkEditList;
+    List<String> drinkJpEditList;
+    List<String> drinkEnEditList;
     List<String> priceEditList;
     List<String> appendEditList;
     List<String> deleteEditList;
@@ -16,12 +17,14 @@ public class EditData extends DrinkData {
 
     public void setListValue(
             String[] indexEditAry,
-            String[] drinkEditAry,
+            String[] drinkJpEditAry,
+            String[] drinkEnEditAry,
             String[] priceEditAry,
             String[] appendEditAry,
             String[] deleteEditAry) {
         this.indexEditList = aryToList(indexEditAry, indexEditList);
-        this.drinkEditList = aryToList(drinkEditAry, drinkEditList);
+        this.drinkJpEditList = aryToList(drinkJpEditAry, drinkJpEditList);
+        this.drinkEnEditList = aryToList(drinkEnEditAry, drinkEnEditList);
         this.priceEditList = aryToList(priceEditAry, priceEditList);
         this.appendEditList = aryToList(appendEditAry, appendEditList);
         this.deleteEditList = aryToList(deleteEditAry, deleteEditList);
@@ -34,8 +37,8 @@ public class EditData extends DrinkData {
     private void buildEditList() {
         if(editList == null) {
             editList = new ArrayList<>(Arrays.asList(
-                indexEditList, drinkEditList, priceEditList,
-                appendEditList, deleteEditList));
+                indexEditList, drinkJpEditList, drinkEnEditList,
+                priceEditList, appendEditList, deleteEditList));
         }
     }//buildEditList()
 
@@ -61,6 +64,23 @@ public class EditData extends DrinkData {
             })
             .forEach(System.out::print);
     }//printNestList()
+
+    //====== getter ======
+    public List<String> getIndexEditList() {
+        return indexEditList;
+    }
+
+    public List<String> getDrinkJpEditList() {
+        return drinkJpEditList;
+    }
+
+    public List<String> getDrinkEnEditList() {
+        return drinkEnEditList;
+    }
+
+    public List<String> getPriceEditList() {
+        return priceEditList;
+    }
 }//class
 
 /*
