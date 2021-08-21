@@ -52,9 +52,9 @@
     <td>
       <fmt:message key="name" bundle="${bundle}" />:
     </td>
-    <c:forEach var="drink" items="${sessionScope['drinkList']}">
+    <c:forEach var="drinkJp" items="${sessionScope['drinkListJp']}">
       <td>
-        <input type="text" name="dr" placeholder="${drink}" />
+        <input type="text" name="drJp" placeholder="${drinkJp}" />
       </td>
     </c:forEach>
       <td>
@@ -66,8 +66,10 @@
     <td>
       <fmt:message key="nameEn" bundle="${bundle}" />:
     </td>
-    <c:forEach varStatus="list" items="${sessionScope['drinkList']}">
-      <td>  </td>
+    <c:forEach var="drinkEn" items="${sessionScope['drinkListEn']}">
+      <td>
+        <input type="text" name="drEn" placeholder="${drinkEn}" />
+      </td>
     </c:forEach>
     <td>
         <input type="text" name="ap" size="5" />
