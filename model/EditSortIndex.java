@@ -3,14 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditSortIndex {
-    private EditData editData;
+public class EditSortIndex extends EditTempLogic {
     private List<String> indexEditList;
     private List<String> sortedIndexList;
-
-    public EditSortIndex(EditData editData){
-        this.editData = editData;
-    }
 
     public void buildIndex() {
         indexEditList = editData.indexEditList;

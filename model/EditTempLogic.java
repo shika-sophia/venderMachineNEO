@@ -1,92 +1,82 @@
+/**
+ * @title venderMachineNeo / model / EditTempLogic.java
+ * @content 編集内容の処理をするクラス群
+ *
+ * @class EditData extends DrinkData   //編集入力をそのまま保存
+ * @class EditTempLogic      //各機能のControl。編集結果を保存
+ * @class EditAppend extends EditTempLogic   //リスト追加機能
+ * @class EditSortIndex extends EditTempLogic//リスト並び替え
+ *
+ * @author shika
+ * @date 2021-08-22
+ */
 package model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.IntStream;
 
 public class EditTempLogic {
-    private EditData editData;
-    private Locale locale;
-    private final int APPEND_SIZE = 4; //appendに必要な追加項目
-    private volatile int baseSize;     //append前の drink数
-    private List<String> defaultIndexList;
+    protected EditData editData;
+    private EditAppend append;
+    private EditSortIndex sort;
+    protected Locale locale;
+    protected List<String> defaultIndexList; //編集前のindex
+    protected List<String> indexTempList;
+    protected List<String> drinkJpTempList;
+    protected List<String> drinkEnTempList;
+    protected List<String> priceTempList;
 
+    protected EditTempLogic() { }
     public EditTempLogic(EditData editData, Locale locale) {
         this.editData = editData;
+        this.append = new EditAppend();
+        this.sort = new EditSortIndex();
         this.locale = locale;
     }
 
     public void setValue() {
-        this.baseSize = editData.drinkJpEditList.size();
+        append.setValue();
+        this.indexTempList = initList(indexTempList);
+        this.drinkJpTempList = initList(drinkJpTempList);
+        this.drinkEnTempList = initList(drinkEnTempList);
+        this.priceTempList = initList(priceTempList);
+    }
 
-    }//setValue()
-
-    private List<String> buildDefaultIndex() {
-        if (defaultIndexList == null) {
-            defaultIndexList = new ArrayList<String>();
+    public List<String> initList(List<String> list){
+        if(list == null) {
+            list = new ArrayList<String>();
+        } else {
+            list.clear();
         }
 
-        this.baseSize = editData.drinkJpEditList.size();
-        defaultIndexList.clear();
-        IntStream.rangeClosed(0, baseSize)
-            .mapToObj(i -> String.valueOf(i * 10))
-            .forEach(defaultIndexList::add);
-
-        return defaultIndexList;
-    }//buildDefaultIndex()
-
-    public void sortByIndex() {
-
-    }//sortByIndex()
-
-    public boolean appendOperation(EditMessage editMess) {
-        List<String> appList = editData.appendEditList;
-
-        //要素がすべて空なら trueを返し append処理なし
-        if(!isOrder(appList)) {
-            return true;
-        }
-
-        //要素が足りない場合 falseを返し 再入力
-        if(appList.size() < APPEND_SIZE) {
-            editMess.IncorrectAppend();
-            return false;
-        }
-
-        String index = appList.get(0);
-        String drinkNameJp = appList.get(1);
-        String drinkNameEn = appList.get(2);
-        String price = appList.get(3);
-
-        boolean canPrice = judgePrice(price);
-
-        editData.indexEditList.add(index);
-        //editData.drinkJpEditList.add(drinkNameJp);
-        //editData.drinkEnEditList.add(drinkNameJp);
-        editData.priceEditList.add(price);
-
-        return true;
-    }//appendOperation()
+        return list;
+    }//buildList()
 
 
     //すべての要素が「""」blankなら false
-    private boolean isOrder(List<String> list) {
+    protected boolean isOrder(List<String> list) {
         boolean isBlank = list.stream()
             .allMatch(e -> e.isBlank());
 
         return !(isBlank);
     }//isOrder()
 
-    //入力チェック(priceの適正判定)
-    private boolean judgePrice(String price) {
-        if(locale.toString().contains("ja")) {
+    //====== getter ======
+    public List<String> getIndexTempList() {
+        return indexTempList;
+    }
 
-        } else {
+    public List<String> getDrinkJpTempList() {
+        return drinkJpTempList;
+    }
 
-        }
+    public List<String> getDrinkEnTempList() {
+        return drinkEnTempList;
+    }
 
-        return false;
+    public List<String> getPriceTempList() {
+        return priceTempList;
     }
 
 }//class
