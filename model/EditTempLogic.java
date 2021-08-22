@@ -19,7 +19,7 @@ public class EditTempLogic {
 
     public void setValue() {
         this.baseSize = editData.drinkJpEditList.size();
-        this.defaultIndexList = buildDefaultIndex();
+
     }//setValue()
 
     private List<String> buildDefaultIndex() {
