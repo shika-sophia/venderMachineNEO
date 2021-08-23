@@ -65,10 +65,12 @@ public class EditorServlet extends MainVenderBundleServlet {
             editFirst = false;
 
         } else {
-            List<String> drinkListJp = editData.getDrinkJpEditList();
-            List<String> drinkListEn = editData.getDrinkEnEditList();
+            List<String> drinkListJp = editTemp.getDrinkJpTempList();
+            List<String> drinkListEn = editTemp.getDrinkEnTempList();
+            List<String> priceListStr =editTemp.getPriceTempList();
             session.setAttribute("drinkListJp", drinkListJp);
             session.setAttribute("drinkListEn", drinkListEn);
+            session.setAttribute("priceListStr", priceListStr);
         }
 
         String path = "/WEB-INF/view/venderEditor.jsp";
@@ -85,7 +87,7 @@ public class EditorServlet extends MainVenderBundleServlet {
         editData.setListValue(
             indexEditAry, drinkJpEditAry, drinkJpEditAry,
             priceEditAry, appendEditAry, deleteEditAry);
-        editTemp.setValue();
+        //editTemp.setValue();
 
         //入力チェック(スクリプトタグ)
         security.setEditList();
@@ -97,13 +99,11 @@ public class EditorServlet extends MainVenderBundleServlet {
         }
 
         //入力チェック(appendEditList)
-        boolean canAppend = editTemp.appendOperation(editMess);
-        if(!canAppend) {
-            String path = "/WEB-INF/view/venderEditor.jsp";
-            doForward(request, response, path);
-        }
-
-        editTemp.sortByIndex();
+//        boolean canAppend = editTemp.appendOperation(editMess);
+//        if(!canAppend) {
+//            String path = "/WEB-INF/view/venderEditor.jsp";
+//            doForward(request, response, path);
+//        }
 
         String path = "/WEB-INF/veiw/venderEditConfirm.jsp";
         doForward(request, response, path);
