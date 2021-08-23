@@ -51,8 +51,7 @@ public class EditTempLogic {
         }
 
         return list;
-    }//buildList()
-
+    }//initList()
 
     //すべての要素が「""」blankなら false
     protected boolean isOrder(List<String> list) {
