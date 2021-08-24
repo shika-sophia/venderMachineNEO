@@ -38,4 +38,12 @@ public class EditMessage {
     public String getEditMsg() {
         return editMsg;
     }
+
+    public void IncorrectDigit() {
+        if(locale.toString().contains("ja")) {
+            editMsg = "数値が無効です。";
+        } else {
+            editMsg = "Incorrect as digit.";
+        }
+    }//IncorrectDigit()
 }//class

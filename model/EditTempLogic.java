@@ -53,13 +53,9 @@ public class EditTempLogic {
         return list;
     }//initList()
 
-    //すべての要素が「""」blankなら false
-    protected boolean isOrder(List<String> list) {
-        boolean isBlank = list.stream()
-            .allMatch(e -> e.isBlank());
-
-        return !(isBlank);
-    }//isOrder()
+    public boolean appendOperation(EditMessage editMess) {
+        return append.appendOperation(editMess);
+    }
 
     //====== getter ======
     public List<String> getIndexTempList() {

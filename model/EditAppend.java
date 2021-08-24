@@ -31,7 +31,7 @@ public class EditAppend extends EditTempLogic {
         List<String> appList = editData.appendEditList;
 
         //要素がすべて空なら trueを返し append処理なし
-        if(!super.isOrder(appList)) {
+        if(!isOrder(appList)) {
             return true;
         }
 
@@ -46,24 +46,63 @@ public class EditAppend extends EditTempLogic {
         String drinkNameEn = appList.get(2);
         String price = appList.get(3);
 
+        boolean canIndex = judgeDigit(index);
         boolean canPrice = judgePrice(price);
 
-        editData.indexEditList.add(index);
-        //editData.drinkJpEditList.add(drinkNameJp);
-        //editData.drinkEnEditList.add(drinkNameJp);
-        editData.priceEditList.add(price);
+        if(!canIndex || !canPrice) {
+            editMess.IncorrectDigit();
+            return false;
+        }
+
+        super.indexTempList.add(index);
+        super.drinkJpTempList.add(drinkNameJp);
+        super.drinkEnTempList.add(drinkNameEn);
+        super.priceTempList.add(price);
 
         return true;
     }//appendOperation()
 
-  //入力チェック(priceの適正判定)
+    //すべての要素が「""」blankなら false
+    protected boolean isOrder(List<String> list) {
+        boolean isBlank = list.stream()
+            .allMatch(e -> e.isBlank());
+
+        return !(isBlank);
+    }//isOrder()
+
+    //引数 strがすべて数字かどうか判定。「.」は除去。
+    protected boolean judgeDigit(String str) {
+        str = str.replace(".", "").trim();
+        List<Boolean> isDigitList = new ArrayList<>();
+
+        str.chars() //str.charAt()の IntStream
+            .mapToObj(c -> Character.isDigit((char) c))
+            .forEach(isDigitList::add);
+
+        return isDigitList.stream().allMatch(b -> b);
+    }//judgeDigit()
+
+    //入力チェック(priceの適正判定)
     private boolean judgePrice(String price) {
-        if(locale.toString().contains("ja")) {
-
-        } else {
-
+        //数字かどうか
+        boolean isDigit = judgeDigit(price);
+        if(!isDigit) {
+            return false;
         }
 
-        return false;
-    }
+        //Locale別の処理
+        if(locale.toString().contains("ja")) {
+            ;
+        } else {
+            price = price.replace(".", "").trim();
+        }
+
+        //整数化して、価格範囲かどうか
+        int priceInt = Integer.valueOf(price);
+        if(priceInt <= 0 || 10000 < priceInt) {
+            return false;
+        }
+
+        return true;
+    }//judgePrice()
 }//class
