@@ -43,7 +43,7 @@ public class EditorServlet extends MainVenderBundleServlet {
     protected EditInputSecurity security;
     protected EditTempLogic editTemp;
     protected EditMessage editMess;
-    private boolean editFirst;
+    private volatile boolean editFirst;
 
     public void init(ServletConfig config)
             throws ServletException {
@@ -56,6 +56,7 @@ public class EditorServlet extends MainVenderBundleServlet {
     }//init()
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //---- sessionScope ----
         HttpSession session = request.getSession();
         if(editFirst) {
             List<String> drinkListJp = data.getDrinkList(new Locale("ja"));
@@ -72,7 +73,11 @@ public class EditorServlet extends MainVenderBundleServlet {
             session.setAttribute("drinkListEn", drinkListEn);
             session.setAttribute("priceListStr", priceListStr);
         }
+        //---- reqestScope ----
+        String editMsg = editMess.getEditMsg();
+        request.setAttribute("editMsg", editMsg);
 
+        //---- forward ----
         String path = "/WEB-INF/view/venderEditor.jsp";
         doForward(request, response, path);
     }//doGet()
@@ -85,25 +90,26 @@ public class EditorServlet extends MainVenderBundleServlet {
         String[] appendEditAry = request.getParameterValues("ap");
         String[] deleteEditAry = request.getParameterValues("de");
         editData.setListValue(
-            indexEditAry, drinkJpEditAry, drinkJpEditAry,
+            indexEditAry, drinkJpEditAry, drinkEnEditAry,
             priceEditAry, appendEditAry, deleteEditAry);
-        //editTemp.setValue();
+        editTemp.setValue();
 
         //入力チェック(スクリプトタグ)
         security.setEditList();
         boolean canAccept = security.checkListElement();
         editMess.acceptMsg(canAccept);
         if(!canAccept) {
-            String path = "/WEB-INF/view/venderEditor.jsp";
-            doForward(request, response, path);
+            editFirst = true; //現在の editDataを破棄
+            doGet(request,response);
         }
 
         //入力チェック(appendEditList)
-//        boolean canAppend = editTemp.appendOperation(editMess);
-//        if(!canAppend) {
-//            String path = "/WEB-INF/view/venderEditor.jsp";
-//            doForward(request, response, path);
-//        }
+        boolean canAppend = editTemp.appendOperation(editMess);
+        if(!canAppend) {
+            doGet(request,response);
+        }
+
+        //indexで並べ替え
 
         String path = "/WEB-INF/veiw/venderEditConfirm.jsp";
         doForward(request, response, path);
