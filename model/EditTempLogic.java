@@ -41,6 +41,11 @@ public class EditTempLogic {
         this.drinkJpTempList = initList(drinkJpTempList);
         this.drinkEnTempList = initList(drinkEnTempList);
         this.priceTempList = initList(priceTempList);
+
+        indexTempList.addAll(editData.getIndexEditList());
+        drinkJpTempList.addAll(editData.getDrinkJpEditList());
+        drinkEnTempList.addAll(editData.getDrinkEnEditList());
+        priceTempList.addAll(editData.getPriceEditList());
     }
 
     public List<String> initList(List<String> list){
@@ -56,6 +61,59 @@ public class EditTempLogic {
     public boolean appendOperation(EditMessage editMess) {
         return append.appendOperation(editMess);
     }
+
+    public boolean checkIndexList(List<String> list) {
+        return list.stream()
+            .map(this::judgeDigit)
+            .allMatch(b -> b);
+    }
+
+    public boolean checkPriceList(List<String> list) {
+        return list.stream()
+            .map(this::judgePrice)
+            .allMatch(b -> b);
+    }
+
+    public void sortByIndex() {
+
+        sort.sortByIndex();
+    }//sortByIndex()
+
+    //引数 strがすべて数字かどうか判定。「.」は除去。
+    protected boolean judgeDigit(String str) {
+        str = str.replace(".", "").trim();
+        List<Boolean> isDigitList = new ArrayList<>();
+
+        str.chars() //str.charAt()の IntStream
+            .mapToObj(c -> Character.isDigit((char) c))
+            .forEach(isDigitList::add);
+
+        return isDigitList.stream().allMatch(b -> b);
+    }//judgeDigit()
+
+    //入力チェック(priceの適正判定)
+    protected boolean judgePrice(String price) {
+        //数字かどうか
+        boolean isDigit = judgeDigit(price);
+        if(!isDigit) {
+            return false;
+        }
+
+        //Locale別の処理
+        if(locale.toString().contains("ja")) {
+            ;
+        } else {
+            price = price.replace(".", "").trim();
+        }
+
+        //整数化して、価格範囲かどうか
+        int priceInt = Integer.valueOf(price);
+        if(priceInt <= 0 || 10000 < priceInt) {
+            return false;
+        }
+
+        return true;
+    }//judgePrice()
 
     //====== getter ======
     public List<String> getIndexTempList() {

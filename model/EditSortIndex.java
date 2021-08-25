@@ -9,18 +9,21 @@ public class EditSortIndex extends EditTempLogic {
 
     public void buildIndex() {
         indexEditList = editData.indexEditList;
-        sortedIndexList = new ArrayList<>();
+
+        if(sortedIndexList == null) {
+            sortedIndexList = new ArrayList<>();
+        } else {
+            sortedIndexList.clear();
+        }
+
         indexEditList.stream()
             .sorted()
             .forEach(sortedIndexList::add);
-    }
+    }//buildIndex()
 
-    public void sortEditList() {
+    public void sortByIndex() {
 
-    }
+    }//sortByIndex()
 
-    private List<String> buildList(List<String>list, int index){
 
-        return list;
-    }
 }//class
