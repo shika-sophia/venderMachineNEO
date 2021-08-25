@@ -92,7 +92,6 @@ public class EditorServlet extends MainVenderBundleServlet {
         editData.setListValue(
             indexEditAry, drinkJpEditAry, drinkEnEditAry,
             priceEditAry, appendEditAry, deleteEditAry);
-        editTemp.setValue();
 
         //入力チェック(スクリプトタグ)
         security.setEditList();
@@ -103,6 +102,17 @@ public class EditorServlet extends MainVenderBundleServlet {
             doGet(request,response);
         }
 
+        //入力チェック(数値であるか)
+        boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
+        boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
+        if(!canIndex || !canPrice) {
+            editMess.IncorrectDigit();
+            doGet(request,response);
+        }
+
+        //TempListを生成
+        editTemp.setValue();
+
         //入力チェック(appendEditList)
         boolean canAppend = editTemp.appendOperation(editMess);
         if(!canAppend) {
@@ -110,6 +120,7 @@ public class EditorServlet extends MainVenderBundleServlet {
         }
 
         //indexで並べ替え
+        editTemp.sortByIndex();
 
         String path = "/WEB-INF/veiw/venderEditConfirm.jsp";
         doForward(request, response, path);
