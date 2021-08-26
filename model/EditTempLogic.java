@@ -58,9 +58,15 @@ public class EditTempLogic {
         return list;
     }//initList()
 
+    //EditorServlet -> this -> EditorAppendクラスに処理を委譲
     public boolean appendOperation(EditMessage editMess) {
         return append.appendOperation(editMess);
     }
+
+    //EditorServlet -> this -> EditorSortIndexクラスに処理を委譲
+    public void sortByIndex() {
+        sort.sortByIndex();
+    }//sortByIndex()
 
     public boolean checkIndexList(List<String> list) {
         return list.stream()
@@ -73,11 +79,6 @@ public class EditTempLogic {
             .map(this::judgePrice)
             .allMatch(b -> b);
     }
-
-    public void sortByIndex() {
-
-        sort.sortByIndex();
-    }//sortByIndex()
 
     //引数 strがすべて数字かどうか判定。「.」は除去。
     protected boolean judgeDigit(String str) {
