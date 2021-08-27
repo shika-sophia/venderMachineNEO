@@ -31,7 +31,7 @@ public class EditData extends DrinkData {
         buildEditList();
 
         //---- Test print ----
-        printNestList(editList);
+        //printNestList(editList);
     }//setListValue()
 
     private void buildEditList() {
@@ -54,16 +54,16 @@ public class EditData extends DrinkData {
         return list;
     }//aryToList()
 
-    //====== Test print ======
-    private void printNestList(List<List<String>> nestList) {
-        nestList.stream()
-            .flatMap(list -> {
-                System.out.println(list.size());
-                list.add(list.size(), "\n");
-                return list.stream();
-            })
-            .forEach(System.out::print);
-    }//printNestList()
+//    //====== Test print ======
+//    private void printNestList(List<List<String>> nestList) {
+//        nestList.stream()
+//            .flatMap(list -> {
+//                System.out.println(list.size());
+//                list.add(list.size(), "\n");
+//                return list.stream();
+//            })
+//            .forEach(System.out::print);
+//    }//printNestList()
 
     //====== getter ======
     public List<String> getIndexEditList() {
