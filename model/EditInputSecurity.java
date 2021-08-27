@@ -42,4 +42,38 @@ public class EditInputSecurity {
 
         return isMatch;
     }//normalizedMatch()
+
+//    //====== Test main() ======
+//    public static void main(String[] args) {
+//        var editData = new EditData();
+//        var security = new EditInputSecurity(editData);
+//
+//        //---- common DemoData ----
+//        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+//        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+//        String[] priceDemoAry = {"100","110","120","130","140"};
+//        String[] appendDemoAry = {"50","か","F","150"};
+//        String[] deleteDemoAry = {"0"};
+//
+//        //---- nomal DemoData ----
+//        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+//        //----script DemoData ----
+//        //String[] drinkJpDemoAry = {"<script>あ</script>","い","う","え","お"};
+//
+//        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+//                    priceDemoAry, appendDemoAry, deleteDemoAry);
+//        security.setEditList();
+//
+//        boolean test = security.checkListElement();
+//        System.out.println("test: " + test);
+//    }//main()
 }//class
+
+/*
+//---- nomal DemoData ----
+test: true
+
+//----script DemoData ----
+test: false
+
+*/
