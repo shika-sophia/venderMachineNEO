@@ -70,4 +70,20 @@ public class EditAppend extends EditTempLogic {
         return !(isBlank);
     }//isOrder()
 
+    //====== Test main() ======
+    public static void main(String[] args) {
+        var editData = new EditData();
+        var editTemp = new EditTempLogic(editData);
+
+        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+        String[] priceDemoAry = {"100","110","120","130","140"};
+        String[] appendDemoAry = {"50","か","F","150"};
+        String[] deleteDemoAry = {"0"};
+        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+              priceDemoAry, appendDemoAry, deleteDemoAry);
+
+    }//main()
+
 }//class

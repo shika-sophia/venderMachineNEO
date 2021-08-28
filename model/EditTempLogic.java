@@ -14,13 +14,11 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class EditTempLogic {
     protected EditData editData;
     private EditAppend append;
     private EditSortIndex sort;
-    protected Locale locale;
     protected List<String> defaultIndexList; //編集前のindex
     protected List<String> indexTempList;
     protected List<String> drinkJpTempList;
@@ -28,11 +26,10 @@ public class EditTempLogic {
     protected List<String> priceTempList;
 
     protected EditTempLogic() { }
-    public EditTempLogic(EditData editData, Locale locale) {
+    public EditTempLogic(EditData editData) {
         this.editData = editData;
         this.append = new EditAppend();
         this.sort = new EditSortIndex();
-        this.locale = locale;
     }
 
     public void setValue() {
@@ -100,14 +97,8 @@ public class EditTempLogic {
             return false;
         }
 
-        //Locale別の処理
-        if(locale.toString().contains("ja")) {
-            ;
-        } else {
-            price = price.replace(".", "").trim();
-        }
-
         //整数化して、価格範囲かどうか
+        price = price.replace(".", "").trim();
         int priceInt = Integer.valueOf(price);
         if(priceInt <= 0 || 10000 < priceInt) {
             return false;
@@ -133,4 +124,57 @@ public class EditTempLogic {
         return priceTempList;
     }
 
+    //====== Test main() ======
+    public static void main(String[] args) {
+        var editData = new EditData();
+        var editTemp = new EditTempLogic(editData);
+
+        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+        //String[] priceDemoAry = {"100","110","120","130","140"};
+        String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
+        String[] appendDemoAry = {"50","か","F","150"};
+        String[] deleteDemoAry = {"0"};
+        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+              priceDemoAry, appendDemoAry, deleteDemoAry);
+
+        boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
+        boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
+        System.out.println("canIndex: " + canIndex);
+        System.out.println("canPrice: " + canPrice);
+    }//main()
+
 }//class
+
+/*
+//---- normal data ----
+canIndex: true
+canPrice: true
+
+//---- index fault ----
+String[] indexDemoAry = {"0", "a", "20", "30", "40"};
+canIndex: false
+canPrice: true
+
+//---- price fault ----
+String[] priceDemoAry = {"100","a","120","130","140"};
+canIndex: true
+canPrice: false
+
+//---- price over ----
+String[] priceDemoAry = {"100","-1","120","130","140"};
+String[] priceDemoAry = {"100","11000","120","130","140"};
+canIndex: true
+canPrice: false
+
+//---- price double as en ----
+String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
+canIndex: true
+canPrice: true
+
+//---- price double as ja ----
+String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
+java.lang.NumberFormatException: For input string: "1.00"
+=> locale別を消去し、すべて「.」を除去に変更し解決す。
+*/
