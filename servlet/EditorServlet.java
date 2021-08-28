@@ -50,7 +50,7 @@ public class EditorServlet extends MainVenderBundleServlet {
         super.init(config);
         editData = new EditData();
         security = new EditInputSecurity(editData);
-        editTemp = new EditTempLogic(editData, locale);
+        editTemp = new EditTempLogic(editData);
         editMess = new EditMessage(locale);
         this.editFirst = true;
     }//init()
