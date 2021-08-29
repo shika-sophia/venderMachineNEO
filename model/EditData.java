@@ -29,9 +29,6 @@ public class EditData extends DrinkData {
         this.appendEditList = aryToList(appendEditAry, appendEditList);
         this.deleteEditList = aryToList(deleteEditAry, deleteEditList);
         buildEditList();
-
-        //---- Test print ----
-        //printNestList(editList);
     }//setListValue()
 
     private void buildEditList() {
@@ -44,7 +41,7 @@ public class EditData extends DrinkData {
 
     private List<String> aryToList(String[] ary, List<String> list) {
         if(list == null) {
-            list = new ArrayList<>(Arrays.asList(ary));
+            list = new ArrayList<String>(Arrays.asList(ary));
         } else {
             list.clear();
             Arrays.stream(ary)
@@ -54,16 +51,41 @@ public class EditData extends DrinkData {
         return list;
     }//aryToList()
 
-//    //====== Test print ======
-//    private void printNestList(List<List<String>> nestList) {
-//        nestList.stream()
-//            .flatMap(list -> {
-//                System.out.println(list.size());
-//                list.add(list.size(), "\n");
-//                return list.stream();
-//            })
-//            .forEach(System.out::print);
-//    }//printNestList()
+//    //==== Test main() ====
+//    public static void main(String[] args) {
+//        var editData = new EditData();
+//
+//        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+//        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+//        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+//        //String[] priceDemoAry = {"100","110","120","130","140"};
+//        String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
+//        String[] appendDemoAry = {"50","か","F","150"};
+//        String[] deleteDemoAry = {"0"};
+//        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+//              priceDemoAry, appendDemoAry, deleteDemoAry);
+//
+//        //---- Test setListValue() ----
+//        System.out.println(editData.indexEditList);
+//        System.out.println(editData.drinkJpEditList);
+//        System.out.println(editData.drinkEnEditList);
+//        System.out.println(editData.priceEditList);
+//        System.out.println(editData.appendEditList);
+//        System.out.println(editData.deleteEditList);
+//
+//	      //---- Test printNestList() ----
+//	      //editData.printNestList(editList);
+//    }//main()
+//
+//  private void printNestList(List<List<String>> nestList) {
+//      nestList.stream()
+//          .flatMap(list -> {
+//              System.out.println(list.size());
+//              list.add(list.size(), "\n");
+//              return list.stream();
+//          })
+//          .forEach(System.out::print);
+//  }//printNestList()
 
     //====== getter ======
     public List<String> getIndexEditList() {
@@ -84,6 +106,14 @@ public class EditData extends DrinkData {
 }//class
 
 /*
+//---- Test setListValue() ----
+[0, 25, 20, 30, 40]
+[あ, い, う, え, お]
+[A, B, C, D, E]
+[1.00, 1.10, 1.20, 1.30, 1.40]
+[50, か, F, 150]
+[0]
+
 // ---- Test printNestList() / <input placeholder=""> ----
 @requestQuery http://localhost:8080/venderMachineNEO/EditorServlet
  *   ?id=&id=&id=&id=&id=&ap=50
