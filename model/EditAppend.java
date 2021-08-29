@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.IntStream;
 
 public class EditAppend extends EditTempLogic {
@@ -72,18 +73,27 @@ public class EditAppend extends EditTempLogic {
 
     //====== Test main() ======
     public static void main(String[] args) {
+        Locale locale = new Locale("en");
         var editData = new EditData();
         var editTemp = new EditTempLogic(editData);
+        var editMess = new EditMessage(locale);
 
         String[] indexDemoAry = {"0", "25", "20", "30", "40"};
         String[] drinkJpDemoAry = {"あ","い","う","え","お"};
         String[] drinkEnDemoAry = {"A","B","C","D","E"};
         String[] priceDemoAry = {"100","110","120","130","140"};
         String[] appendDemoAry = {"50","か","F","150"};
+        //String[] appendDemoAry = {"","か","F","150"};
+        //String[] appendDemoAry = {"","","",""};
         String[] deleteDemoAry = {"0"};
         editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
               priceDemoAry, appendDemoAry, deleteDemoAry);
+        editTemp.setValue();
 
+        boolean canAppend = editTemp.appendOperation(editMess);
+        System.out.println("canAppend: " + canAppend);
+        System.out.println("appendEditList: " + editData.appendEditList);
+        System.out.println("appendEditList.size(): " + editData.appendEditList.size());
     }//main()
 
 }//class

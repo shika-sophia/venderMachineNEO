@@ -25,7 +25,8 @@ public class EditTempLogic {
     protected List<String> drinkEnTempList;
     protected List<String> priceTempList;
 
-    protected EditTempLogic() { }
+    public EditTempLogic() { }
+
     public EditTempLogic(EditData editData) {
         this.editData = editData;
         this.append = new EditAppend();
@@ -139,6 +140,13 @@ public class EditTempLogic {
         editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
               priceDemoAry, appendDemoAry, deleteDemoAry);
 
+        //---- Test setValue() ----
+        System.out.println(editTemp.indexTempList);
+        System.out.println(editTemp.drinkJpTempList);
+        System.out.println(editTemp.drinkEnTempList);
+        System.out.println(editTemp.priceTempList);
+
+        //---- Test checkIndexList(), checkPriceList() ----
         boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
         boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
         System.out.println("canIndex: " + canIndex);
@@ -148,6 +156,33 @@ public class EditTempLogic {
 }//class
 
 /*
+//==== Test setValue() ====
+null
+null
+null
+null
+
+this.indexTempList = initList(indexTempList);
+
+public List<String> initList(List<String> list){
+    if(list == null) {
+        list = new ArrayList<String>();
+    } else {
+        list.clear();
+    }
+
+    return list;
+}//initList()
+
+【考察】
+これだとメソッド内ローカル変数の listは毎回 newされるが
+メソッド呼出元で代入しているフィールドのListは newされないまま、
+領域を確保されていないので nullとなるのかも。
+同様のロジックは EditDataの aryToList()でも行っているが、
+こちらは indexEditList等を正常に生成できていることを確認す。
+
+
+//==== Test checkIndexList(), checkPriceList() ====
 //---- normal data ----
 canIndex: true
 canPrice: true
@@ -177,4 +212,5 @@ canPrice: true
 String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
 java.lang.NumberFormatException: For input string: "1.00"
 => locale別を消去し、すべて「.」を除去に変更し解決す。
+=> 「.」は isDigit() -> trueとなる模様。
 */
