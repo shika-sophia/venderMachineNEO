@@ -17,8 +17,8 @@ import java.util.List;
 
 public class EditTempLogic {
     protected EditData editData;
-    private EditAppend append;
-    private EditSortIndex sort;
+    protected EditAppend append;
+    protected EditSortIndex sort;
     protected List<String> defaultIndexList; //編集前のindex
     protected List<String> indexTempList;
     protected List<String> drinkJpTempList;
@@ -29,8 +29,8 @@ public class EditTempLogic {
 
     public EditTempLogic(EditData editData) {
         this.editData = editData;
-        this.append = new EditAppend();
-        this.sort = new EditSortIndex();
+        this.append = new EditAppend(editData);
+        this.sort = new EditSortIndex(editData);
     }
 
     public void setValue() {
@@ -125,42 +125,43 @@ public class EditTempLogic {
         return priceTempList;
     }
 
-    //====== Test main() ======
-    public static void main(String[] args) {
-        var editData = new EditData();
-        var editTemp = new EditTempLogic(editData);
-
-        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
-        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
-        String[] drinkEnDemoAry = {"A","B","C","D","E"};
-        //String[] priceDemoAry = {"100","110","120","130","140"};
-        String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
-        String[] appendDemoAry = {"50","か","F","150"};
-        String[] deleteDemoAry = {"0"};
-        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
-              priceDemoAry, appendDemoAry, deleteDemoAry);
-
-        //---- Test setValue() ----
-        System.out.println(editTemp.indexTempList);
-        System.out.println(editTemp.drinkJpTempList);
-        System.out.println(editTemp.drinkEnTempList);
-        System.out.println(editTemp.priceTempList);
-
-        //---- Test checkIndexList(), checkPriceList() ----
-        boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
-        boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
-        System.out.println("canIndex: " + canIndex);
-        System.out.println("canPrice: " + canPrice);
-    }//main()
+//    //====== Test main() ======
+//    public static void main(String[] args) {
+//        var editData = new EditData();
+//        var editTemp = new EditTempLogic(editData);
+//
+//        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+//        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+//        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+//        //String[] priceDemoAry = {"100","110","120","130","140"};
+//        String[] priceDemoAry = {"1.00","1.10","1.20","1.30","1.40"};
+//        String[] appendDemoAry = {"50","か","F","150"};
+//        String[] deleteDemoAry = {"0"};
+//        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+//              priceDemoAry, appendDemoAry, deleteDemoAry);
+//        editTemp.setValue();
+//
+//        //---- Test setValue() ----
+//        System.out.println(editTemp.indexTempList);
+//        System.out.println(editTemp.drinkJpTempList);
+//        System.out.println(editTemp.drinkEnTempList);
+//        System.out.println(editTemp.priceTempList);
+//
+//        //---- Test checkIndexList(), checkPriceList() ----
+//        boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
+//        boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
+//        System.out.println("canIndex: " + canIndex);
+//        System.out.println("canPrice: " + canPrice);
+//    }//main()
 
 }//class
 
 /*
 //==== Test setValue() ====
-null
-null
-null
-null
+[0, 25, 20, 30, 40]
+[あ, い, う, え, お]
+[A, B, C, D, E]
+[1.00, 1.10, 1.20, 1.30, 1.40]
 
 this.indexTempList = initList(indexTempList);
 
@@ -177,9 +178,22 @@ public List<String> initList(List<String> list){
 【考察】
 これだとメソッド内ローカル変数の listは毎回 newされるが
 メソッド呼出元で代入しているフィールドのListは newされないまま、
-領域を確保されていないので nullとなるのかも。
-同様のロジックは EditDataの aryToList()でも行っているが、
+領域を確保されていないので nullとなるのかもと思ったが、これは違う。
+同様のロジックは EditDataの aryToList()でも行っており、
 こちらは indexEditList等を正常に生成できていることを確認す。
+
+=> EditAppend, EditSortInputのインスタンス時
+引数なしのコンストラクタとしていたので、
+継承した両クラスのフィールド editDataに値が代入されず nullとなっていたと思われ、
+super(editData);を追加。
+
+=> java.lang.StackOverflowError
+super(editData) -> EditTempLogic(editData)
+ -> new EditAppend(editData) -> super(editData)
+のように永久ループするため StackOverflowError
+
+=> super(editData);とコンストラクタを呼び出すのではなく、
+super.editData = editData;でフィールドの代入のみ行えばよい。
 
 
 //==== Test checkIndexList(), checkPriceList() ====
