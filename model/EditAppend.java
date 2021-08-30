@@ -9,6 +9,11 @@ public class EditAppend extends EditTempLogic {
     private final int APPEND_SIZE = 4; //appendに必要な追加項目
     private volatile int baseSize;     //append前の drink数
 
+    public EditAppend(EditData editData) {
+        super.editData = editData;
+        super.append = this;
+    }
+
     public void setValue() {
         this.baseSize = editData.drinkJpEditList.size();
         this.defaultIndexList = buildDefaultIndex();
@@ -55,6 +60,7 @@ public class EditAppend extends EditTempLogic {
             return false;
         }
 
+        super.setValue(); //TempListの生成
         super.indexTempList.add(index);
         super.drinkJpTempList.add(drinkNameJp);
         super.drinkEnTempList.add(drinkNameEn);
@@ -94,6 +100,30 @@ public class EditAppend extends EditTempLogic {
         System.out.println("canAppend: " + canAppend);
         System.out.println("appendEditList: " + editData.appendEditList);
         System.out.println("appendEditList.size(): " + editData.appendEditList.size());
+
+        System.out.println("indexTempList: " + editTemp.indexTempList);
+        System.out.println("drinkJpTempList: " + editTemp.drinkJpTempList);
+        System.out.println("drinkEnTempList: " + editTemp.drinkEnTempList);
+        System.out.println("priceTempList: " + editTemp.priceTempList);
+        System.out.println("editMsg: " + editMess.getEditMsg());
     }//main()
 
 }//class
+
+/*
+canAppend: true
+appendEditList: [50, か, F, 150]
+appendEditList.size(): 4
+indexTempList: [0, 25, 20, 30, 40]
+drinkJpTempList: [あ, い, う, え, お]
+drinkEnTempList: [A, B, C, D, E]
+priceTempList: [100, 110, 120, 130, 140]
+editMsg: null
+
+【考察】 TempListに追加されていない。
+main()内の editTemp.setValue()を削除すると
+各TempListは nullとなる。
+
+appendOperation()内の super.setValue()をしないと
+NullPointerExceptionとなる。
+*/
