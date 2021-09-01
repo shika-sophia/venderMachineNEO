@@ -106,7 +106,7 @@ public class EditorServlet extends MainVenderBundleServlet {
         boolean canIndex = editTemp.checkIndexList(editData.getIndexEditList());
         boolean canPrice = editTemp.checkPriceList(editData.getPriceEditList());
         if(!canIndex || !canPrice) {
-            editMess.IncorrectDigit();
+            editMess.IncorrectInput();
             doGet(request,response);
         }
 
