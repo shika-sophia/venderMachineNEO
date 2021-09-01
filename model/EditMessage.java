@@ -26,7 +26,6 @@ public class EditMessage {
         }
     }//acceptMsg()
 
-
     public void IncorrectAppend() {
         if(locale.toString().contains("ja")) {
             editMsg = "追加項目をすべて入力してください。";
@@ -35,15 +34,20 @@ public class EditMessage {
         }
     }//IncorrectAppend()
 
-    public String getEditMsg() {
-        return editMsg;
-    }
-
-    public void IncorrectDigit() {
+    public void IncorrectInput() {
         if(locale.toString().contains("ja")) {
-            editMsg = "数値が無効です。";
+            editMsg = "入力値が無効です。";
         } else {
-            editMsg = "Incorrect as digit.";
+            editMsg = "Your input is incorrect.";
         }
     }//IncorrectDigit()
+
+    //====== getter ======
+    public String getEditMsg() {
+        if(editMsg == null) {
+            editMsg = "";
+        }
+
+        return editMsg;
+    }//getEditMsg()
 }//class

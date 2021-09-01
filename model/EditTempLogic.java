@@ -29,8 +29,8 @@ public class EditTempLogic {
 
     public EditTempLogic(EditData editData) {
         this.editData = editData;
-        this.append = new EditAppend(editData);
-        this.sort = new EditSortIndex(editData);
+        this.append = new EditAppend(editData, this);
+        this.sort = new EditSortIndex(editData, this);
     }
 
     public void setValue() {

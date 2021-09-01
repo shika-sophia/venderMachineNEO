@@ -8,16 +8,28 @@
  * List.indexを取り出し 0～5
  * 例) 0, 2, 1, 3, 4     //indexOriginList
  * 各Listを List.index順に addしていく。
+ *
+ * ◆DBの利用
+ * 本来はDBのテーブルを用意して、DAOクラスで検索・ソートを行うところであるが、
+ * 今回はListだけでそのロジックを組むことにする。
+ *
  */
 package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditSortIndex extends EditTempLogic {
+public class EditSortIndex {
+    private EditData editData;
+    private EditTempLogic editTemp;
     private List<String> indexEditList;
     private List<String> sortedIndexList;
     private List<Integer> originIndexList;
+
+    public EditSortIndex(EditData editData, EditTempLogic editTemp) {
+        this.editData = editData;
+        this.editTemp = editTemp;
+    }
 
     public void buildIndex() {
         indexEditList = editData.indexEditList;
@@ -43,10 +55,10 @@ public class EditSortIndex extends EditTempLogic {
         buildIndex();
         originIndexList.stream()
             .forEach(index -> {
-                indexTempList.add(indexEditList.get(index));
-                drinkJpTempList.add(editData.drinkJpEditList.get(index));
-                drinkEnTempList.add(editData.drinkEnEditList.get(index));
-                priceTempList.add(editData.priceEditList.get(index));
+                editTemp.indexTempList.add(indexEditList.get(index));
+                editTemp.drinkJpTempList.add(editData.drinkJpEditList.get(index));
+                editTemp.drinkEnTempList.add(editData.drinkEnEditList.get(index));
+                editTemp.priceTempList.add(editData.priceEditList.get(index));
             });
     }//sortByIndex()
 

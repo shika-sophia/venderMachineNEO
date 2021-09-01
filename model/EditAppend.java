@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
-public class EditAppend extends EditTempLogic {
+public class EditAppend {
+    private EditData editData;
+    private EditTempLogic editTemp;
     private volatile int baseSize;     //append前の drink数
+    private List<String> defaultIndexList;
 
-    public EditAppend(EditData editData) {
-        super.editData = editData;
-        super.append = this;
+    public EditAppend(EditData editData, EditTempLogic editTemp) {
+        this.editData = editData;
+        this.editTemp = editTemp;
     }
 
     public void setValue() {
@@ -25,7 +28,7 @@ public class EditAppend extends EditTempLogic {
 
         this.baseSize = editData.drinkJpEditList.size();
         defaultIndexList.clear();
-        IntStream.rangeClosed(0, baseSize)
+        IntStream.range(0, baseSize)
             .mapToObj(i -> String.valueOf(i * 10))
             .forEach(defaultIndexList::add);
 
@@ -51,20 +54,19 @@ public class EditAppend extends EditTempLogic {
         String drinkNameEn = appList.get(2);
         String price = appList.get(3);
 
-        boolean canIndex = judgeDigit(index);
+        boolean canIndex = editTemp.judgeDigit(index);
         boolean isIndex = judgeStack(index);
-        boolean canPrice = judgePrice(price);
+        boolean canPrice = editTemp.judgePrice(price);
 
         if(!canIndex || !isIndex || !canPrice ) {
-            editMess.IncorrectDigit();
+            editMess.IncorrectInput();
             return false;
         }
 
-        super.setValue(); //TempListの生成
-        super.indexTempList.add(index);
-        super.drinkJpTempList.add(drinkNameJp);
-        super.drinkEnTempList.add(drinkNameEn);
-        super.priceTempList.add(price);
+        editTemp.indexTempList.add(index);
+        editTemp.drinkJpTempList.add(drinkNameJp);
+        editTemp.drinkEnTempList.add(drinkNameEn);
+        editTemp.priceTempList.add(price);
 
         return true;
     }//appendOperation()
@@ -93,8 +95,8 @@ public class EditAppend extends EditTempLogic {
         String[] drinkJpDemoAry = {"あ","い","う","え","お"};
         String[] drinkEnDemoAry = {"A","B","C","D","E"};
         String[] priceDemoAry = {"100","110","120","130","140"};
-        //String[] appendDemoAry = {"50","か","F","150"};
-        String[] appendDemoAry = {"10","か","F","150"};
+        String[] appendDemoAry = {"50","か","F","150"};
+        //String[] appendDemoAry = {"10","か","F","150"};
         //String[] appendDemoAry = {"","か","F","150"};
         //String[] appendDemoAry = {"","","",""};
         String[] deleteDemoAry = {"0"};
@@ -104,13 +106,15 @@ public class EditAppend extends EditTempLogic {
 
         boolean canAppend = editTemp.appendOperation(editMess);
         System.out.println("canAppend: " + canAppend);
+        System.out.println("baseSize: " + editTemp.append.baseSize);
+        System.out.println("defaultIndexList: " + editTemp.append.defaultIndexList);
         System.out.println("appendEditList: " + editData.appendEditList);
         System.out.println("appendEditList.size(): " + editData.appendEditList.size());
 
-        System.out.println("indexTempList: " + editTemp.append.indexTempList);
-        System.out.println("drinkJpTempList: " + editTemp.append.drinkJpTempList);
-        System.out.println("drinkEnTempList: " + editTemp.append.drinkEnTempList);
-        System.out.println("priceTempList: " + editTemp.append.priceTempList);
+        System.out.println("indexTempList: " + editTemp.indexTempList);
+        System.out.println("drinkJpTempList: " + editTemp.drinkJpTempList);
+        System.out.println("drinkEnTempList: " + editTemp.drinkEnTempList);
+        System.out.println("priceTempList: " + editTemp.priceTempList);
         System.out.println("editMsg: " + editMess.getEditMsg());
     }//main()
 
@@ -145,6 +149,25 @@ NullPointerExceptionとなる。
 editTemp.append.indexTempListで呼び出すと追加されている。
 これは元の EditTempLogicのインスタンスと
 EditAppendの superとしてのEditTempLogicが別々に存在していることを示している。
+
+=> 複数のTempListを持つことは混乱の原因となるため、継承関係を解消し、
+EditTempLogicからの委譲先として独立した子クラスに変更。
+EditTempLogic内のフィールドで保持し、インスタンスも同クラス内で行う。
+
+editTemp.indexTempList.add(index);
+追加も反映されている。
+
+canAppend: true
+baseSize: 5
+defaultIndexList: [0, 10, 20, 30, 40]
+appendEditList: [50, か, F, 150]
+appendEditList.size(): 4
+indexTempList: [0, 25, 20, 30, 40, 50]
+drinkJpTempList: [あ, い, う, え, お, か]
+drinkEnTempList: [A, B, C, D, E, F]
+priceTempList: [100, 110, 120, 130, 140, 150]
+editMsg: null
+
 
 ◆要素空白でも size 4問題
 条件式: if(appList.size() < APPEND_SIZE)
