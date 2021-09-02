@@ -31,7 +31,7 @@ public class EditSortIndex {
         this.editTemp = editTemp;
     }
 
-    public void buildIndex() {
+    private void buildIndex() {
         indexEditList = editData.indexEditList;
 
         if(sortedIndexList == null) {
@@ -53,6 +53,7 @@ public class EditSortIndex {
 
     public void sortByIndex() {
         buildIndex();
+        editTemp.initTempList();
         originIndexList.stream()
             .forEach(index -> {
                 editTemp.indexTempList.add(indexEditList.get(index));
@@ -62,4 +63,64 @@ public class EditSortIndex {
             });
     }//sortByIndex()
 
+//    //====== Test main() ======
+//    public static void main(String[] args) {
+//        var editData = new EditData();
+//        var editTemp = new EditTempLogic(editData);
+//
+//        String[] indexDemoAry = {"0", "25", "20", "30", "40"};
+//        String[] drinkJpDemoAry = {"あ","い","う","え","お"};
+//        String[] drinkEnDemoAry = {"A","B","C","D","E"};
+//        String[] priceDemoAry = {"100","110","120","130","140"};
+//        String[] appendDemoAry = {"50","か","F","150"};
+//        String[] deleteDemoAry = {"0"};
+//        editData.setListValue(indexDemoAry, drinkJpDemoAry, drinkEnDemoAry,
+//              priceDemoAry, appendDemoAry, deleteDemoAry);
+//        editTemp.setValue();
+//
+//        //---- Test buildIndex() ----
+//        editTemp.sort.buildIndex();
+//        System.out.println("indexEditList: " + editTemp.sort.indexEditList);
+//        System.out.println("sortedIndexList: " + editTemp.sort.sortedIndexList);
+//        System.out.println("originIndexList: " + editTemp.sort.originIndexList);
+//
+//        //---- Test sortByIndex() ----
+//        System.out.println("---- before-sort ----");
+//        printTemp(editTemp);
+//
+//        editTemp.sortByIndex();
+//
+//        System.out.println("---- after-sort ----");
+//        printTemp(editTemp);
+//    }//main()
+//
+//    private static void printTemp(EditTempLogic editTemp) {
+//        System.out.println("indexTempList: " + editTemp.indexTempList);
+//        System.out.println("drinkJpTempList: " + editTemp.drinkJpTempList);
+//        System.out.println("drinkEnTempList: " + editTemp.drinkEnTempList);
+//        System.out.println("priceTempList: " + editTemp.priceTempList);
+//    }//printTemp()
 }//class
+
+/*
+//====== Test buildIndex() ======
+indexEditList: [0, 25, 20, 30, 40]
+sortedIndexList: [0, 20, 25, 30, 40]
+originIndexList: [0, 2, 1, 3, 4]
+
+//====== Test sortByIndex() ======
+indexEditList: [0, 25, 20, 30, 40]
+sortedIndexList: [0, 20, 25, 30, 40]
+originIndexList: [0, 2, 1, 3, 4]
+---- before-sort ----
+indexTempList: [0, 25, 20, 30, 40]
+drinkJpTempList: [あ, い, う, え, お]
+drinkEnTempList: [A, B, C, D, E]
+priceTempList: [100, 110, 120, 130, 140]
+---- after-sort ----
+indexTempList: [0, 20, 25, 30, 40]
+drinkJpTempList: [あ, う, い, え, お]
+drinkEnTempList: [A, C, B, D, E]
+priceTempList: [100, 120, 110, 130, 140]
+
+ */

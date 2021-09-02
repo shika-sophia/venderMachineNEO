@@ -35,18 +35,21 @@ public class EditTempLogic {
 
     public void setValue() {
         append.setValue();
-        this.indexTempList = initList(indexTempList);
-        this.drinkJpTempList = initList(drinkJpTempList);
-        this.drinkEnTempList = initList(drinkEnTempList);
-        this.priceTempList = initList(priceTempList);
-
+        initTempList();
         indexTempList.addAll(editData.getIndexEditList());
         drinkJpTempList.addAll(editData.getDrinkJpEditList());
         drinkEnTempList.addAll(editData.getDrinkEnEditList());
         priceTempList.addAll(editData.getPriceEditList());
     }
 
-    public List<String> initList(List<String> list){
+    public void initTempList() {
+        this.indexTempList = initList(indexTempList);
+        this.drinkJpTempList = initList(drinkJpTempList);
+        this.drinkEnTempList = initList(drinkEnTempList);
+        this.priceTempList = initList(priceTempList);
+    }
+
+    private List<String> initList(List<String> list){
         if(list == null) {
             list = new ArrayList<String>();
         } else {
