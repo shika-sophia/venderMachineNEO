@@ -75,7 +75,6 @@
         <input type="text" name="ap" size="5" />
     </td>
   </tr>
-
   <tr> <!-- price section -->
     <td>
       <fmt:message key="price" bundle="${bundle}" />:
