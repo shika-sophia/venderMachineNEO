@@ -60,7 +60,7 @@
   <tr>
     <td colspan="3">Edit OK？</td>
     <td>
-      <form action="ConfirmServlet" method="POST">
+      <form action="EditConfirmServlet" method="POST">
         <button name="confirm" value="ok"> OK </button>
         <button name="confirm" value="ng"> NG </button>
       </form>
