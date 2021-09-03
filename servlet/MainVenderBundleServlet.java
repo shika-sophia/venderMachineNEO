@@ -160,6 +160,7 @@ public class MainVenderBundleServlet extends HttpServlet {
         List<String> drinkList = data.getDrinkList(locale);
         List<String> priceListStr = data.getPriceListStr(locale, localeChanged, EX_RATE);
         List<String> selectListStr = data.getSelectListStr(locale,localeChanged, EX_RATE);
+        session.setAttribute("data", data);
         session.setAttribute("locale", locale.toString());
         session.setAttribute("EX_RATE", EX_RATE);
         session.setAttribute("drinkList", drinkList);

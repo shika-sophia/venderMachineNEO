@@ -58,6 +58,8 @@ public class EditorServlet extends MainVenderBundleServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //---- sessionScope ----
         HttpSession session = request.getSession();
+        session.setAttribute("editTemp", editTemp);
+
         if(editFirst) {
             List<String> drinkListJp = data.getDrinkList(new Locale("ja"));
             List<String> drinkListEn = data.getDrinkList(new Locale("en"));
