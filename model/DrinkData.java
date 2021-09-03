@@ -11,42 +11,25 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class DrinkData {
+public class DrinkData extends AbsDrinkDefault {
     private double EX_RATE;
-
-    //---- define drinkList as Locale ja ----
-    private List<String> drinkListJp = new ArrayList<>(
-        Arrays.asList(
-            "コーヒー",
-            "コーラ",
-            "オレンジジュース",
-            "紅茶",
-            "ウォーター"
-        ));
-
-    //---- define drinkList as Locale en ----
-    private List<String> drinkListEn = new ArrayList<>(
-        Arrays.asList(
-            "Coffee",
-            "Coca-Cola",
-            "Orange-Juce",
-            "Red-Tea",
-            "Water"
-        ));
-
-    //---- define priceList ----
-    private List<Integer> priceList = new ArrayList<>(
-        Arrays.asList(130, 110, 110, 130, 100));
-    private List<String> priceListStr = new ArrayList<>();
-
-    //---- define selectList ----
-    private List<Integer> selectList = new ArrayList<>(
-        Arrays.asList(10, 50, 100, 500, 1000));
+    protected List<String> drinkListJp = new ArrayList<>();
+    protected List<String> drinkListEn = new ArrayList<>();
+    protected List<Integer> priceList = new ArrayList<>();
+    protected List<String> priceListStr = new ArrayList<>();
+    private List<Integer> selectList = new ArrayList<>();
     private List<String> selectListStr = new ArrayList<>();
+
+    public DrinkData() {
+        //defaultのListをコピーして新規にフィールド化
+        this.drinkListJp.addAll(super.drinkListJp);
+        this.drinkListEn.addAll(super.drinkListEn);
+        this.priceList.addAll(super.priceList);
+        this.selectList.addAll(super.selectList);
+    }//constructor
 
     //====== getter, setter ======
     public List<String> getDrinkList(Locale locale) {
