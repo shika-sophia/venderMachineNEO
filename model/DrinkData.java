@@ -88,17 +88,22 @@ public class DrinkData extends AbsDrinkDefault {
 //    //====== Test main() ======
 //    public static void main(String[] args) {
 //        var data = new DrinkData();
-//
-//        //---- Test getPriceListStr(), getSelectListStr() ----
-//        //Locale locale = new Locale("ja");
+//        Locale locale = new Locale("ja");
 //        //Locale locale = new Locale("ja_JP");
-//        Locale locale = new Locale("en");
+//        //Locale locale = new Locale("en");
 //        double EX_RATE = 100d;
 //        //double EX_RATE = 110d;
 //
-//        List<String> list = data.getPriceListStr(locale, EX_RATE);
-//        List<String> list2 = data.getSelectListStr(locale, EX_RATE);
-//        System.out.println("locale: " + data.locale);
+//        //---- Test constructor ----
+//        System.out.println("drinkListJp: " + data.drinkListJp);
+//        System.out.println("drinkListEn: " + data.drinkListEn);
+//        System.out.println("priceList: " + data.priceList);
+//        System.out.println("drinkList: " + data.getDrinkList(locale));
+//
+//        //---- Test getPriceListStr(), getSelectListStr() ----
+//        List<String> list = data.getPriceListStr(locale, false, EX_RATE);
+//        List<String> list2 = data.getSelectListStr(locale, false, EX_RATE);
+//        System.out.println("locale: " + locale);
 //        System.out.println("priceListStr: " + list);
 //        System.out.println(
 //            "priceListStr: " + data.priceListStr);
@@ -139,5 +144,26 @@ priceListStr: [1.30, 1.10, 1.10, 1.30, 1.00]
 priceListStr: [1.30, 1.10, 1.10, 1.30, 1.00]
 selectListStr: [0.10, 0.50, 1.00, 5.00, 10.00]
 selectListStr: [0.10, 0.50, 1.00, 5.00, 10.00]
+
+//---- Test constructor ----
+drinkListJp: [コーヒー, コーラ, オレンジジュース, 紅茶, ウォーター]
+drinkListEn: [Coffee, Coca-Cola, Orange-Juce, Red-Tea, Water]
+priceList: [130, 110, 110, 130, 100]
+drinkList: [Coffee, Coca-Cola, Orange-Juce, Red-Tea, Water]
+locale: en
+priceListStr: [1.30, 1.10, 1.10, 1.30, 1.00]
+priceListStr: [1.30, 1.10, 1.10, 1.30, 1.00]
+selectListStr: [0.10, 0.50, 1.00, 5.00, 10.00]
+selectListStr: [0.10, 0.50, 1.00, 5.00, 10.00]
+
+drinkListJp: [コーヒー, コーラ, オレンジジュース, 紅茶, ウォーター]
+drinkListEn: [Coffee, Coca-Cola, Orange-Juce, Red-Tea, Water]
+priceList: [130, 110, 110, 130, 100]
+drinkList: [コーヒー, コーラ, オレンジジュース, 紅茶, ウォーター]
+locale: ja
+priceListStr: [130, 110, 110, 130, 100]
+priceListStr: [130, 110, 110, 130, 100]
+selectListStr: [10, 50, 100, 500, 1000]
+selectListStr: [10, 50, 100, 500, 1000]
 
 */
