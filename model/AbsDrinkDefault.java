@@ -1,3 +1,12 @@
+/*
+ * @inheritance ---- 継承関係 ----
+ * @class AbsDrinkDefault
+ *          ↑
+ * @class DrinkData extends AbsDrinkDefault
+ *          ↑
+ * @class EditData extends DrinkData
+ */
+
 package model;
 
 import java.util.ArrayList;
