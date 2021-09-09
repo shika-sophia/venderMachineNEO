@@ -97,7 +97,7 @@ public class EditTempLogic {
     protected boolean judgePrice(String price) {
         //数字かどうか
         boolean isDigit = judgeDigit(price);
-        if(!isDigit) {
+        if(!isDigit || price.equals("")) {
             return false;
         }
 
