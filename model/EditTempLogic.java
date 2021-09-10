@@ -111,6 +111,11 @@ public class EditTempLogic {
         return true;
     }//judgePrice()
 
+    //要素が全て空ならば false
+    public boolean isOrder(List<String> list) {
+        return append.isOrder(list);
+    }//isOrder()
+
     //====== getter ======
     public List<String> getIndexTempList() {
         return indexTempList;
